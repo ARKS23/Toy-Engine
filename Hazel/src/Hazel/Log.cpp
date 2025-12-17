@@ -1,3 +1,5 @@
+
+#include "hzpch.h"
 #include "Log.h"
 #include "spdlog/sinks/stdout_color_sinks.h" // 引入带颜色的控制台输出器
 
