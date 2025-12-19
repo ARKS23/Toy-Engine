@@ -77,9 +77,15 @@ namespace Hazel {
 		// 设置OpenGL上下文
 		glfwMakeContextCurrent(m_Window);
 
-		// TODO: 初始化GLAD
-		//int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-		//HZ_CORE_ASSERT(status, "Failed to initialize Glad!");
+		// 初始化GLAD
+		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+		HZ_CORE_ASSERT(status, "Failed to initialize Glad!");
+
+		// 打印OpenGL的Log
+		HZ_CORE_INFO("OpenGL Info:");
+		HZ_CORE_INFO("  Vendor: {0}", (const char*)glGetString(GL_VENDOR));
+		HZ_CORE_INFO("  Renderer: {0}", (const char*)glGetString(GL_RENDERER));
+		HZ_CORE_INFO("  Version: {0}", (const char*)glGetString(GL_VERSION));
 
 		// 设置自定义指针槽，存储自定义数据,后续设置回调需要使用
 		glfwSetWindowUserPointer(m_Window, &m_Data);

@@ -1,5 +1,6 @@
 workspace "Hazel"
 	architecture "x64"
+	startproject "Sandbox"
 
 	configurations 
 	{
@@ -8,11 +9,13 @@ workspace "Hazel"
 		"Dist"
 	}
 
-outputdir = "%{cfg.buildcfg}-{cfg.system}-${cfg.architecture}"
+outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 IncludeDir = {}
 IncludeDir["GLFW"] = "Hazel/vendor/GLFW/include"
+IncludeDir["GLAD"] = "Hazel/vendor/GLAD/include"
 
+include "Hazel/vendor/GLAD"
 include "Hazel/vendor/GLFW"
 
 project "Hazel"
@@ -38,12 +41,14 @@ project "Hazel"
 	{
 		"%{prj.name}/src",
 		"%{prj.name}/vendor/spdlog/include",
+		"%{prj.name}/vendor/GLAD/include",
 		"%{prj.name}/vendor/GLFW/include"
 	}
 
 	links
 	{
 		"GLFW",
+		"GLAD",
 		"opengl32.lib"
 	}
 
@@ -55,29 +60,32 @@ project "Hazel"
 		defines
 		{
 			"HZ_PLATFORM_WINDOWS",
-			"HZ_BUILD_DLL"
+			"HZ_BUILD_DLL",
+			"GLFW_INCLUDE_NONE"
 		}
 
 		buildoptions { "/utf-8" }
 
 		postbuildcommands
 		{
-			("{COPYFILE} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Sandbox")
+			--("{COPYFILE} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Sandbox")
+			("{MKDIR} ../bin/" .. outputdir .. "/Sandbox"),
+			("{COPYFILE} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Sandbox/Hazel.dll")
 		}
 
 		filter "configurations:Debug"
 			defines "HZ_DEBUG"
-			buildoptions "/MDd"
+			--buildoptions "/MDd"
 			symbols "On"
 
 		filter "configurations:Release"
 			defines "HZ_RELEASE"
-			buildoptions "/MD"
+			--buildoptions "/MD"
 			optimize "On"
 
 		filter "configurations:Dist"
 			defines "HZ_DIST"
-			buildoptions "/MD"
+			--buildoptions "/MD"
 			optimize "On"
 
 
@@ -113,23 +121,22 @@ project "Sandbox"
 
 		defines
 		{
-			"HZ_PLATFORM_WINDOWS",
-			"HZ_BUILD_EXE"
+			"HZ_PLATFORM_WINDOWS"
 		}
 
 		buildoptions { "/utf-8" }
 
 		filter "configurations:Debug"
 			defines "HZ_DEBUG"
-			buildoptions "/MDd"
+			--buildoptions "/MDd"
 			symbols "On"
 
 		filter "configurations:Release"
 			defines "HZ_RELEASE"
-			buildoptions "/MD"
+			--buildoptions "/MD"
 			optimize "On"
 
 		filter "configurations:Dist"
 			defines "HZ_DIST"
-			buildoptions "/MD"
+			--buildoptions "/MD"
 			optimize "On"
