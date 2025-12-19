@@ -11,6 +11,8 @@ int main(int argc, char** argv) {
 	HZ_CORE_INFO("INIT CORE LOGGER");
 	HZ_INFO("INIT CLIENT LOGGER");
 
+	HZ_INFO("\n Log for git commit!");
+
 	Hazel::Application* app = Hazel::CreateApplication();
 	app->Run();
 	delete app;
