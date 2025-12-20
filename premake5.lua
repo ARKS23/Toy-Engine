@@ -42,6 +42,7 @@ project "Hazel"
 	includedirs
 	{
 		"%{prj.name}/src",
+		"%{prj.name}/vendor/glm",
 		"%{prj.name}/vendor/spdlog/include",
 		"%{prj.name}/vendor/GLAD/include",
 		"%{prj.name}/vendor/GLFW/include",
