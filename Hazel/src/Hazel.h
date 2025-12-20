@@ -8,6 +8,9 @@
 #include "Hazel/Events/KeyEvent.h"
 #include "Hazel/ImGui/ImGuiLayer.h"
 
+#include "Hazel/Core/Input.h"
+#include "Hazel/Core/KeyCodes.h"
+#include "Hazel/Core/MouseCodes.h"
 
 
 // ----------------------- Entry point -----------------------
