@@ -19,6 +19,11 @@ namespace Hazel {
 		void PushLayer(Layer* layer); // 暴露给客户端使用的接口
 		void PushOverlay(Layer* overlay);
 
+		inline Window& GetWindow() { return *m_Window; } // 获取当前使用的Window类
+
+	public:
+		static Application& Get() { return *s_Instance; } // 静态函数: 返回Application单例引用
+
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
 
@@ -26,6 +31,9 @@ namespace Hazel {
 		std::unique_ptr<Window> m_Window;
 		bool m_Running = true;
 		LayerStack m_LayerStack; // 层栈容器，管理所有层的生命周期
+
+	private:
+		static Application* s_Instance; // 单例Application
 	};
 
 	// 该函数由客户端实现

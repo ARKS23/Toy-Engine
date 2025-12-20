@@ -23,6 +23,9 @@ namespace Hazel {
 		virtual void SetVSync(bool enabled) override;
 		virtual bool IsVSync() const override;
 
+		// 获取原生窗口指针
+		virtual void* GetNativeWindow() const override { return m_Window; }
+
 	private:
 		// 内部初始化和关闭函数
 		virtual void Init(const WindowProps& props);

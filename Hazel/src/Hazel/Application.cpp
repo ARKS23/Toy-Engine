@@ -6,14 +6,20 @@
 #include <GLFW/glfw3.h>
 
 namespace Hazel {
-#define HZ_BIND_EVENT_FN(x) std::bind(&x, this, std::placeholders::_1)
+	//#define HZ_BIND_EVENT_FN(x) std::bind(&x, this, std::placeholders::_1)
 	/* 等价写法: 接收传入参数e
 	m_Window->SetEventCallback([this](Event& e) {
 		this->OnEvent(e);
 	});
 	*/
 
+	Application* Application::s_Instance = nullptr;
+
 	Application::Application() {
+		// 单例模式
+		HZ_CORE_ASSERT(!s_Instance, "Application already exists!");
+		s_Instance = this;
+
 		m_Window = std::unique_ptr<Window>(Window::Create());
 		// 一旦有事件发生，调用OnEvent函数
 		m_Window->SetEventCallback(HZ_BIND_EVENT_FN(Application::OnEvent));
@@ -25,7 +31,7 @@ namespace Hazel {
 
 	void Application::Run() {
 		while (m_Running) {
-			glClearColor(0.1, 0.1, 0.5, 1);
+			glClearColor(0.3, 0.2, 0.5, 1);
 			glClear(GL_COLOR_BUFFER_BIT);
 
 			// update顺序:从下往上遍历，与事件的传播顺序是相反的
