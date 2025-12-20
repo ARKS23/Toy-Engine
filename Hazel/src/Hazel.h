@@ -2,8 +2,8 @@
 
 // for use by hazel application
 #include <cstdio>
-#include "Hazel/Application.h"
-#include "Hazel/Log.h"
+#include "Hazel/Core/Application.h"
+#include "Hazel/Core/Log.h"
 #include "Hazel/Events/Event.h"
 #include "Hazel/Events/KeyEvent.h"
 #include "Hazel/ImGui/ImGuiLayer.h"
@@ -11,5 +11,5 @@
 
 
 // ----------------------- Entry point -----------------------
-#include "Hazel/EntryPoint.h"
+#include "Hazel/Core/EntryPoint.h"
 // ----------------------- Entry point -----------------------
