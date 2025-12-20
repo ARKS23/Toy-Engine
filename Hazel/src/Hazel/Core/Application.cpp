@@ -22,10 +22,11 @@ namespace Hazel {
 		HZ_CORE_ASSERT(!s_Instance, "Application already exists!");
 		s_Instance = this;
 
-		// 根据不同平台创建对应平台的窗口
-		m_Window = std::unique_ptr<Window>(Window::Create());
-		// 一旦有事件发生，调用OnEvent函数
-		m_Window->SetEventCallback(HZ_BIND_EVENT_FN(Application::OnEvent));
+		m_Window = std::unique_ptr<Window>(Window::Create()); // 根据不同平台创建对应平台的窗口
+		m_Window->SetEventCallback(HZ_BIND_EVENT_FN(Application::OnEvent)); // 一旦有事件发生，调用OnEvent函数
+
+		m_ImGuiLayer = new ImGuiLayer();
+		m_LayerStack.PushOverlay(m_ImGuiLayer); // ImGuiLayer是overlay
 	}
 
 	Application::~Application()
@@ -37,10 +38,15 @@ namespace Hazel {
 			glClearColor(0.3, 0.2, 0.5, 1);
 			glClear(GL_COLOR_BUFFER_BIT);
 
-			// update顺序:从下往上遍历，与事件的传播顺序是相反的
-			for (Layer* layer : m_LayerStack) {
+			// update顺序:从下往上更新游戏逻辑，与事件的传播顺序是相反的
+			for (Layer* layer : m_LayerStack) 
 				layer->OnUpdate();
-			}
+
+			// ImGui渲染（UI逻辑）
+			m_ImGuiLayer->Begin(); // 开启UI帧铺画布
+			for (Layer* layer : m_LayerStack)
+				layer->OnImGuiRender(); // 各层在画布上绘制
+			m_ImGuiLayer->End();	// 画好的提交给CPU处理
 
 			m_Window->OnUpdate();
 		}

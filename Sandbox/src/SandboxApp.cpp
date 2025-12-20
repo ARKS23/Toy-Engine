@@ -10,7 +10,7 @@ public:
 
 	}
 
-	void OnEvent(Hazel::Event& event) override {
+	virtual void OnEvent(Hazel::Event& event) override {
 		// 测试事件
 		if (event.GetEventType() == Hazel::EventType::KeyPressed) {
 			Hazel::KeyPressedEvent& e = (Hazel::KeyPressedEvent&)event;
@@ -22,13 +22,16 @@ public:
 			HZ_TRACE("引擎输入轮询测试，按下TAB按键");
 		}
 	}
+
+	virtual void OnImGuiRender() override {
+		// 自定义一个窗口
+	}
 };
 
 class Sandbox : public Hazel::Application {
 public:
 	Sandbox() {
 		PushLayer(new ExampleLayer());
-		PushOverlay(new Hazel::ImGuiLayer());
 	}
 
 	~Sandbox() {

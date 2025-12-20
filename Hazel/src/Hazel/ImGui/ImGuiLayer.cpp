@@ -28,11 +28,11 @@ namespace Hazel {
 		// 设置风格
 		ImGui::StyleColorsDark();
 
-		// viewports开启时样式调整
+		// 多视口开启时样式调整
 		ImGuiStyle& style = ImGui::GetStyle();
 		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
-			style.WindowRounding = 0.0f;
-			style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+			style.WindowRounding = 0.0f; // 去掉圆角
+			style.Colors[ImGuiCol_WindowBg].w = 1.0f; // 背景非透明
 		}
 
 		// 获取Application单例，然后从中获取Window类再从具体Window类中获取原生指针
@@ -50,112 +50,40 @@ namespace Hazel {
 		ImGui::DestroyContext();
 	}
 
-	void ImGuiLayer::OnUpdate() {
-		ImGuiIO& io = ImGui::GetIO();
-		Application& app = Application::Get();
+	
 
-		// 设置窗口大小
-		io.DisplaySize = ImVec2(static_cast<float>(app.GetWindow().GetWidth()), static_cast<float>(app.GetWindow().GetHeight()));
-		
-		// 计算时间差，让ImGui动画播放速度正常
-		float time = static_cast<float>(glfwGetTime());
-		io.DeltaTime = m_Time > 0.0f ? (time - m_Time) : (1.f / 60.f);
-		m_Time = time;
+	void ImGuiLayer::OnEvent(Event& e) {
+		// 待补充
+	}
 
+	void ImGuiLayer::OnImGuiRender() {
+		/* 测试使用 */
+		static bool show = true;
+		ImGui::ShowDemoWindow(&show);
+	}
+
+	void ImGuiLayer::Begin() {
 		// 开始新的一帧
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
+	}
 
-		// 绘制UI内容: 画一个ImGui自带窗口测试
-		static bool show = true;
-		ImGui::ShowDemoWindow(&show);
+	void ImGuiLayer::End() {
+		ImGuiIO& io = ImGui::GetIO();
+		Application& app = Application::Get();
+		io.DisplaySize = ImVec2((float)app.GetWindow().GetWidth(), (float)app.GetWindow().GetHeight());
 
-		// 渲染
+		// 渲染主窗口
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-		// 若开启了Vewports，需要额外的渲染步骤防止ImGui拖出后黑屏
+		// 处理多视口情况
 		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
-			GLFWwindow* backup_current_context = glfwGetCurrentContext();
-			ImGui::UpdatePlatformWindows();
-			ImGui::RenderPlatformWindowsDefault();
-			glfwMakeContextCurrent(backup_current_context);
+			GLFWwindow* backup_current_context = glfwGetCurrentContext(); // 备份主窗口的上下文
+			ImGui::UpdatePlatformWindows(); // 更新所有的独立窗口
+			ImGui::RenderPlatformWindowsDefault(); // 独立窗口中执行渲染
+			glfwMakeContextCurrent(backup_current_context); // 切回主窗口上下文
 		}
 	}
-
-	void ImGuiLayer::OnEvent(Event& e) {
-		/* Event Glue: Hazel的Event转换为ImGui的IO状态 */
-
-		EventDispatcher dispatcher(e);
-
-		// 事件分发器分发事件给对应的处理函数
-		dispatcher.Dispatch<MouseButtonPressedEvent>(HZ_BIND_EVENT_FN(ImGuiLayer::OnMouseButtonPressedEvent));
-		dispatcher.Dispatch<MouseButtonReleasedEvent>(HZ_BIND_EVENT_FN(ImGuiLayer::OnMouseButtonReleasedEvent));
-		dispatcher.Dispatch<MouseMovedEvent>(HZ_BIND_EVENT_FN(ImGuiLayer::OnMouseMovedEvent));
-		dispatcher.Dispatch<MouseScrolledEvent>(HZ_BIND_EVENT_FN(ImGuiLayer::OnMouseScrolledEvent));
-		dispatcher.Dispatch<KeyPressedEvent>(HZ_BIND_EVENT_FN(ImGuiLayer::OnKeyPressedEvent));
-		dispatcher.Dispatch<KeyReleasedEvent>(HZ_BIND_EVENT_FN(ImGuiLayer::OnKeyReleasedEvent));
-		dispatcher.Dispatch<KeyTypedEvent>(HZ_BIND_EVENT_FN(ImGuiLayer::OnKeyTypedEvent));
-		dispatcher.Dispatch<WindowResizeEvent>(HZ_BIND_EVENT_FN(ImGuiLayer::OnWindowResizeEvent));
-	}
-
-	/* ---------------------------------------------- 事件处理函数 ---------------------------------------------- */
-	bool ImGuiLayer::OnMouseButtonPressedEvent(MouseButtonPressedEvent& e)
-	{
-		ImGuiIO& io = ImGui::GetIO();
-		io.MouseDown[e.GetMouseButton()] = true;// 告诉 ImGui 鼠标按下了
-		return false; // 不进行拦截，让下层也能收到
-	}
-
-	bool ImGuiLayer::OnMouseButtonReleasedEvent(MouseButtonReleasedEvent& e)
-	{
-		ImGuiIO& io = ImGui::GetIO();
-		io.MouseDown[e.GetMouseButton()] = false;
-		return false;
-	}
-
-	bool ImGuiLayer::OnMouseMovedEvent(MouseMovedEvent& e)
-	{
-		ImGuiIO& io = ImGui::GetIO();
-		io.MousePos = ImVec2(e.GetX(), e.GetY());
-		return false;
-	}
-
-	bool ImGuiLayer::OnMouseScrolledEvent(MouseScrolledEvent& e)
-	{
-		ImGuiIO& io = ImGui::GetIO();
-		io.MouseWheelH += e.GetXOffset();
-		io.MouseWheel -= e.GetYOffset();
-		return false;
-	}
-
-	bool ImGuiLayer::OnKeyPressedEvent(KeyPressedEvent& e)
-	{
-		return false;
-	}
-
-	bool ImGuiLayer::OnKeyReleasedEvent(KeyReleasedEvent& e)
-	{
-		return false;
-	}
-
-	bool ImGuiLayer::OnKeyTypedEvent(KeyTypedEvent& e)
-	{
-		ImGuiIO& io = ImGui::GetIO();
-		int keycode = e.GetKeyCode();
-		if (keycode > 0 && keycode < 0x10000)
-			io.AddInputCharacter((unsigned short)keycode); // 用于文本框输入
-		return false;
-	}
-
-	bool ImGuiLayer::OnWindowResizeEvent(WindowResizeEvent& e)
-	{
-		ImGuiIO& io = ImGui::GetIO();
-		io.DisplaySize = ImVec2((float)e.GetWidth(), (float)e.GetHeight());
-		io.DisplayFramebufferScale = ImVec2(1.0f, 1.0f);
-		glViewport(0, 0, e.GetWidth(), e.GetHeight()); // 更新 OpenGL 视口
-		return false;
-	}
-
 }
