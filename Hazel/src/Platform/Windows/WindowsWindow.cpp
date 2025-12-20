@@ -5,7 +5,6 @@
 #include "Hazel/Events/MouseEvent.h"
 #include "Hazel/Events/KeyEvent.h"
 
-//#include <glad/glad.h>
 
 namespace Hazel {
 	// 单例模式: glfwInit只调用一次
@@ -32,7 +31,6 @@ namespace Hazel {
 	}
 	void WindowsWindow::OnUpdate() {
 		/* 这两个函数在渲染循环中最后都会调用，封装到update中 */
-
 		// 轮询事件
 		glfwPollEvents();
 		// 交换缓冲区

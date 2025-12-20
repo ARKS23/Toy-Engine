@@ -1,16 +1,18 @@
 #include "hzpch.h"
 #include "Application.h"
 
+#include "Hazel/Core/Input.h"
 #include "Hazel/Events/ApplicationEvent.h"
 
 #include <GLFW/glfw3.h>
 
 namespace Hazel {
 	//#define HZ_BIND_EVENT_FN(x) std::bind(&x, this, std::placeholders::_1)
-	/* 等价写法: 接收传入参数e
-	m_Window->SetEventCallback([this](Event& e) {
-		this->OnEvent(e);
-	});
+	/* 
+		等价写法: 接收传入参数e
+		m_Window->SetEventCallback([this](Event& e) {
+			this->OnEvent(e);
+		});
 	*/
 
 	Application* Application::s_Instance = nullptr;
@@ -20,6 +22,7 @@ namespace Hazel {
 		HZ_CORE_ASSERT(!s_Instance, "Application already exists!");
 		s_Instance = this;
 
+		// 根据不同平台创建对应平台的窗口
 		m_Window = std::unique_ptr<Window>(Window::Create());
 		// 一旦有事件发生，调用OnEvent函数
 		m_Window->SetEventCallback(HZ_BIND_EVENT_FN(Application::OnEvent));
@@ -38,6 +41,10 @@ namespace Hazel {
 			for (Layer* layer : m_LayerStack) {
 				layer->OnUpdate();
 			}
+
+			//TEST
+			std::pair<float, float> pos = Input::GetMousePosition();
+			HZ_CORE_TRACE("{0}, {1}", pos.first, pos.second);
 
 			m_Window->OnUpdate();
 		}
