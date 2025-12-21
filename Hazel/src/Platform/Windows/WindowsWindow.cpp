@@ -85,7 +85,6 @@ namespace Hazel {
 		// 窗口大小改变
 		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height) {
 			// 取回数据
-			//WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 			WindowData& data = *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
 			data.Width = width;
 			data.Height = height;
@@ -97,7 +96,6 @@ namespace Hazel {
 
 		// 关闭窗口
 		glfwSetWindowCloseCallback(m_Window, [](GLFWwindow* window) {
-			//WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 			WindowData& data = *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
 			WindowCloseEvent event;
 			data.EventCallback(event);
@@ -105,7 +103,6 @@ namespace Hazel {
 
 		// 键盘按键
 		glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int key, int scancode, int action, int mods) {
-			//WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 			WindowData& data = *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
 
 			switch (action)
@@ -130,7 +127,6 @@ namespace Hazel {
 
 		// 字符输入
 		glfwSetCharCallback(m_Window, [](GLFWwindow* window, unsigned int keycode) {
-			//WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 			WindowData& data = *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
 			KeyTypedEvent event(keycode);
 			data.EventCallback(event);
@@ -138,7 +134,6 @@ namespace Hazel {
 
 		// 鼠标点击
 		glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int mods) {
-			//WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 			WindowData& data = *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
 
 			switch (action)
@@ -158,7 +153,6 @@ namespace Hazel {
 
 		// 鼠标滚动
 		glfwSetScrollCallback(m_Window, [](GLFWwindow* window, double xOffset, double yOffset) {
-			//WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 			WindowData& data = *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
 
 			// 进行类型转换，事件系统设计的是float输入参数
@@ -168,7 +162,6 @@ namespace Hazel {
 
 		// 鼠标移动
 		glfwSetCursorPosCallback(m_Window, [](GLFWwindow* window, double xPos, double yPos) {
-			//WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 			WindowData& data = *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
 
 			MouseMovedEvent event(static_cast<float>(xPos), static_cast<float>(yPos));
