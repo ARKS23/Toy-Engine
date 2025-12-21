@@ -19,8 +19,8 @@ namespace Hazel {
 		virtual void OnImGuiRender() override; // 测试用
 
 	public:
-		void Begin();
-		void End();
+		void Begin(); // 开启画布
+		void End();   // 绘制画布上的内容
 
 	private:
 		float m_Time = 0.0f;

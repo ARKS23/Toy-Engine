@@ -5,6 +5,8 @@
 #include <GLFW/glfw3.h>
 
 namespace Hazel {
+	class GraphicsContext;
+
 	class WindowsWindow : public Window
 	{
 	public:
@@ -33,6 +35,7 @@ namespace Hazel {
 
 	private:
 		GLFWwindow* m_Window; // 真正工作的GLFW窗口指针
+		GraphicsContext* m_Context; // 上下文管理对象
 
 		// 设计这个结构体是为了兼容GLFW的C风格代码
 		struct WindowData {

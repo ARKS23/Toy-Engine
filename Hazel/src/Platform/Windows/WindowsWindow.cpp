@@ -5,6 +5,8 @@
 #include "Hazel/Events/MouseEvent.h"
 #include "Hazel/Events/KeyEvent.h"
 
+#include "Platform/OpenGL/OpenGLContext.h"
+
 
 namespace Hazel {
 	// 单例模式: glfwInit只调用一次
@@ -30,11 +32,9 @@ namespace Hazel {
 		Shutdown();
 	}
 	void WindowsWindow::OnUpdate() {
-		/* 这两个函数在渲染循环中最后都会调用，封装到update中 */
 		// 轮询事件
 		glfwPollEvents();
-		// 交换缓冲区
-		glfwSwapBuffers(m_Window);
+		m_Context->SwapBuffers();
 	}
 
 	void WindowsWindow::SetVSync(bool enabled) {
@@ -73,17 +73,8 @@ namespace Hazel {
 		m_Window = glfwCreateWindow(static_cast<int>(m_Data.Width), static_cast<int>(m_Data.Height), m_Data.Title.c_str(), nullptr, nullptr);
 
 		// 设置OpenGL上下文
-		glfwMakeContextCurrent(m_Window);
-
-		// 初始化GLAD
-		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-		HZ_CORE_ASSERT(status, "Failed to initialize Glad!");
-
-		// 打印OpenGL的Log
-		HZ_CORE_INFO("OpenGL Info:");
-		HZ_CORE_INFO("  Vendor: {0}", (const char*)glGetString(GL_VENDOR));
-		HZ_CORE_INFO("  Renderer: {0}", (const char*)glGetString(GL_RENDERER));
-		HZ_CORE_INFO("  Version: {0}", (const char*)glGetString(GL_VERSION));
+		m_Context = new OpenGLContext(m_Window);
+		m_Context->Init();
 
 		// 设置自定义指针槽，存储自定义数据,后续设置回调需要使用
 		glfwSetWindowUserPointer(m_Window, &m_Data);
