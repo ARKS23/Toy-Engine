@@ -4,6 +4,7 @@
 namespace Hazel {
 	OpenGLShader::OpenGLShader(const std::string& filepath) : m_FilePath(filepath) {
 		// TODO: 单文件shader
+		HZ_CORE_WARN("TODO: single file constructor");
 	}
 
 	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc) : m_Name(name){
@@ -141,9 +142,9 @@ namespace Hazel {
 
 		const char* fragmentShaderCode = m_OpenGLSourceCode[GL_FRAGMENT_SHADER].c_str();
 		fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-		glShaderSource(fragmentShader, 1, &vertexShaderCode, nullptr);
+		glShaderSource(fragmentShader, 1, &fragmentShaderCode, nullptr);
 		glCompileShader(fragmentShader);
-		checkShaderCompile(fragmentShader, "vertex shader:");
+		checkShaderCompile(fragmentShader, "fragment shader:");
 
 		// 进行着色器链接操作
 		m_RendererID = glCreateProgram();
@@ -158,8 +159,8 @@ namespace Hazel {
 			HZ_CORE_ERROR("{0}: {1}", "ERROR::SHADER::PROGRAM::LINKING_FAILED", linkLog);
 		}
 
-		glDeleteProgram(vertexShader);
-		glDeleteProgram(fragmentShader);
+		glDeleteShader(vertexShader);
+		glDeleteShader(fragmentShader);
 	}
 
 	void OpenGLShader::Reflect(GLenum stage, const std::vector<uint32_t>& shaderData)

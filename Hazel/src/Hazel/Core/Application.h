@@ -27,6 +27,10 @@ namespace Hazel {
 		static Application& Get() { return *s_Instance; } // 静态函数: 返回Application单例引用
 
 	private:
+		/* 测试函数 */
+		void TestShader();
+
+	private:
 		bool OnWindowClose(WindowCloseEvent& e);
 
 	private:
@@ -34,7 +38,6 @@ namespace Hazel {
 		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running = true;
 		LayerStack m_LayerStack; // 层栈容器，管理所有层的生命周期
-
 
 	private:
 		static Application* s_Instance; // 单例Application

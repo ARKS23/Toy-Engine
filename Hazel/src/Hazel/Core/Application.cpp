@@ -6,6 +6,9 @@
 
 #include <GLFW/glfw3.h>
 
+/* ≤‚ ‘ */
+#include "Hazel/Renderer/Shader.h"
+
 namespace Hazel {
 	//#define HZ_BIND_EVENT_FN(x) std::bind(&x, this, std::placeholders::_1)
 	/* 
@@ -27,11 +30,13 @@ namespace Hazel {
 
 		m_ImGuiLayer = new ImGuiLayer();
 		m_LayerStack.PushOverlay(m_ImGuiLayer); // ImGuiLayer «overlay
+
+		/* ≤‚ ‘ */
+		HZ_CORE_WARN("Application Constructor: Test Func");
+		TestShader();
 	}
 
-	Application::~Application()
-	{
-	}
+	Application::~Application(){}
 
 	void Application::Run() {
 		while (m_Running) {
@@ -84,4 +89,37 @@ namespace Hazel {
 		return true;
 	}
 
+
+	/* -------------------------------------- ≤‚ ‘∫Ø ˝ -------------------------------------------- */
+	void Application::TestShader() {
+		/* ≤‚ ‘◊≈…´∆˜¿‡ */
+		Ref<Shader> testShader = Shader::Create("testShader");
+
+		const char* c_vertexSrc = R"(
+			#version 460 core
+			layout(location = 0) in vec3 aPos;
+
+		uniform mat4 model;
+		uniform mat4 view;
+		uniform mat4 projection;
+
+		void main() {
+			gl_Position = projection * view * model * vec4(aPos, 1.0);
+		} )";
+		const std::string vertexSrc(c_vertexSrc);
+
+		const char* c_fargmentSrc = R"(
+			#version 460 core
+			out vec4 FragColor;
+
+			uniform vec3 lightColor;
+
+			void main() {
+				FragColor = vec4(lightColor, 1.0);
+			}
+		)";
+		const std::string fragmentSrc(c_fargmentSrc);
+
+		Ref<Shader> testShader2 = Shader::Create("testShader2", vertexSrc, fragmentSrc);
+	}
 };
