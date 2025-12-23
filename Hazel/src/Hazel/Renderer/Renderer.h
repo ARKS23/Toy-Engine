@@ -2,6 +2,7 @@
 
 #include "Hazel/Renderer/RendererAPI.h"
 #include "Hazel/Renderer/Shader.h"
+#include "Hazel/Renderer/Camera/Camera.h"
 
 namespace Hazel {
 	class Renderer {
@@ -12,7 +13,7 @@ namespace Hazel {
 		static void OnWindowResize(uint32_t width, uint32_t height); // 窗口大小改变时调用的函数
 
 		/* BeginScene和EndScene控制渲染每一帧 */
-		static void BeginScene(); // 待补充
+		static void BeginScene(Camera& camera);
 		static void EndScene();
 
 		static void Submit(const Ref<Shader>& shader, const Ref<VertexArray>& vertexArray, const glm::mat4& transform = glm::mat4(1.f)); // 提交数据进行渲染

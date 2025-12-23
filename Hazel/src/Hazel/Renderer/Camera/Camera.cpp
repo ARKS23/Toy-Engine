@@ -15,7 +15,7 @@ namespace Hazel {
 		front.z = sin(glm::radians(m_Yaw)) * cos(glm::radians(m_Pitch));
 		m_Forward = front;
 
-		// 右手坐标系，叉乘顺序用右手螺旋定则确定
+		// 右手坐标系，叉乘顺序用右手螺旋定则确定方向
 		m_Right = glm::normalize(glm::cross(m_Forward, m_WorldUp));
 		m_Up = glm::normalize(glm::cross(m_Right, m_Forward));
 

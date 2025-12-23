@@ -29,9 +29,12 @@ namespace Hazel {
 		void SetYaw(float yaw) { m_Yaw = yaw; UpdateCameraVectors(); }
 		void SetPitch(float pitch) { m_Pitch = pitch; UpdateCameraVectors(); }
 
+	public:
+		virtual void SetProjectionMatrix(float a, float b, float c, float d) = 0; // 正交相机和透视相机参数含义不一样
+
 	protected:
-		virtual void ReCalculateViewMatrix();
 		void UpdateCameraVectors();
+		virtual void ReCalculateViewMatrix();
 
 	protected:
 		glm::mat4 m_ProjectionMatrix = glm::mat4(1.f);
@@ -43,11 +46,11 @@ namespace Hazel {
 		glm::vec3 m_Forward;
 		glm::vec3 m_Right;
 		glm::vec3 m_Up;
-		glm::vec3 m_WorldUp;
+		glm::vec3 m_WorldUp = {0.f, 1.f, 0.f};
 
 		// 欧拉角，单位是度
-		float m_Yaw;
-		float m_Pitch;
+		float m_Yaw = -90.f;
+		float m_Pitch = 0.f;
 	};
 }
 
