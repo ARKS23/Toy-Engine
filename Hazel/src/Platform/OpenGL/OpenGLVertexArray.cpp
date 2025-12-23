@@ -60,52 +60,63 @@ namespace Hazel {
 		// 解析layout: 逐个element设置vertexArrayPointer，内部的element的偏移量已经在layout中构造时预处理过
 		const BufferLayout& layout = vertexBuffer->GetLayout();
 		for (const BufferElement& element : layout) {
-			// TODO优化: 设置成静态预分配
-			std::unordered_set<ShaderDataType> floatSet({ ShaderDataType::Float, ShaderDataType::Float2, ShaderDataType::Float3, ShaderDataType::Float4 });
-			std::unordered_set<ShaderDataType> intBoolSet({ ShaderDataType::Int, ShaderDataType::Int2, ShaderDataType::Int3, ShaderDataType::Int4, ShaderDataType::Bool});
-			std::unordered_set<ShaderDataType> matSet({ ShaderDataType::Mat3, ShaderDataType::Mat4});
-
-			if (floatSet.count(element.Type)) {
-				glEnableVertexAttribArray(m_VertexBufferIndex); // 设置对应的槽，GLSL: layout (location = m_VertexBufferIndex)
-				glVertexAttribPointer(
-					m_VertexBufferIndex,	// 槽位
-					element.GetComponentCount(), // 分量数，float3 -> 3
-					ShaderDataTypeToOpenGLBaseType(element.Type), // 转成OpenGL的类型
-					element.Normalized ? GL_TRUE : GL_FALSE, // 是否标准化
-					layout.GetStride(), // 整体步长
-					(const void*)element.Offset // 该element在内部的偏移量
-				);
-				m_VertexBufferIndex++; // 更新槽位给下个element使用
-			}
-			else if (intBoolSet.count(element.Type)) {
-				glEnableVertexAttribArray(m_VertexBufferIndex);
-				glVertexAttribIPointer( // 踩坑: 这里Int类型要加I,否则GLSL编译后转成float
-					m_VertexBufferIndex,
-					element.GetComponentCount(),
-					ShaderDataTypeToOpenGLBaseType(element.Type),
-					layout.GetStride(),
-					(const void*)element.Offset
-				);
-				m_VertexBufferIndex++;
-			}
-			else if (matSet.count(element.Type)) {
-				uint8_t count = element.GetComponentCount();
-				for (uint8_t i = 0; i < count; ++i) { // 矩阵类型要占用多个槽，遍历处理。比如mat3等于3个float3
-					glEnableVertexAttribArray(m_VertexBufferIndex);
+			switch (element.Type)
+			{
+				case ShaderDataType::Float:
+				case ShaderDataType::Float2:
+				case ShaderDataType::Float3:
+				case ShaderDataType::Float4:
+				{
+					glEnableVertexAttribArray(m_VertexBufferIndex); // 设置对应的槽，GLSL: layout (location = m_VertexBufferIndex)
 					glVertexAttribPointer(
-						m_VertexBufferIndex,
-						count,
-						ShaderDataTypeToOpenGLBaseType(element.Type),
-						element.Normalized ? GL_TRUE : GL_FALSE,
-						layout.GetStride(),
-						(const void*)(element.Offset + sizeof(float) * count * i) // element内部的内部的layout布局
+						m_VertexBufferIndex,	// 槽位
+						element.GetComponentCount(), // 分量数，float3 -> 3
+						ShaderDataTypeToOpenGLBaseType(element.Type), // 转成OpenGL的类型
+						element.Normalized ? GL_TRUE : GL_FALSE, // 是否标准化
+						layout.GetStride(), // 整体步长
+						(const void*)(uintptr_t)element.Offset // 该element在内部的偏移量
 					);
-					glVertexAttribDivisor(m_VertexBufferIndex, 1); // 实例化渲染
-					m_VertexBufferIndex++;
+					m_VertexBufferIndex++; // 更新槽位给下个element使用
+					break;
 				}
-			}
-			else {
-				HZ_CORE_ASSERT(false, "Unknown ShaderDataType!");
+				case ShaderDataType::Int:
+				case ShaderDataType::Int2:
+				case ShaderDataType::Int3:
+				case ShaderDataType::Int4:
+				case ShaderDataType::Bool:
+				{
+					glEnableVertexAttribArray(m_VertexBufferIndex);
+					glVertexAttribIPointer( // 踩坑: 这里Int类型要加I,否则GLSL编译后转成float
+						m_VertexBufferIndex,
+						element.GetComponentCount(),
+						ShaderDataTypeToOpenGLBaseType(element.Type),
+						layout.GetStride(),
+						(const void*)(uintptr_t)element.Offset
+					);
+					m_VertexBufferIndex++;
+					break;
+				}
+				case ShaderDataType::Mat3:
+				case ShaderDataType::Mat4:
+				{
+					uint8_t count = element.GetComponentCount();
+					for (uint8_t i = 0; i < count; ++i) { // 矩阵类型要占用多个槽，遍历处理。比如mat3等于3个float3
+						glEnableVertexAttribArray(m_VertexBufferIndex);
+						glVertexAttribPointer(
+							m_VertexBufferIndex,
+							count,
+							ShaderDataTypeToOpenGLBaseType(element.Type),
+							element.Normalized ? GL_TRUE : GL_FALSE,
+							layout.GetStride(),
+							(const void*)(uintptr_t)(element.Offset + sizeof(float) * count * i) // mat内部由多个vec组成，计算vec的偏移
+						);
+						glVertexAttribDivisor(m_VertexBufferIndex, 1); // 实例化渲染,画完一个实例才往后走一格(这里设计做批处理渲染)
+						m_VertexBufferIndex++;
+					}
+					break;
+				}
+				default:
+					HZ_CORE_ASSERT(false, "Unknown ShaderDataType!");
 			}
 		}
 
