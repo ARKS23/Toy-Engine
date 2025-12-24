@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Hazel/Core/Core.h"
+
 namespace Hazel {
 	enum class ShaderDataType {
 		/* 解决C++与GLSL类型之间的映射问题 */
@@ -39,7 +41,7 @@ namespace Hazel {
 	}
 
 
-	struct BufferElement {
+	struct HAZEL_API BufferElement {
 		/* 描述单个顶点数据属性的封装数据结构 */
 	public:
 		std::string Name;		// 调试名称
@@ -77,7 +79,7 @@ namespace Hazel {
 	};
 
 
-	class BufferLayout {
+	class HAZEL_API BufferLayout {
 	public:
 		BufferLayout() {}
 		BufferLayout(std::initializer_list<BufferElement> elements) : m_Elements(elements) {
@@ -112,7 +114,7 @@ namespace Hazel {
 	};
 
 
-	class VertexBuffer {
+	class HAZEL_API VertexBuffer {
 	public:
 		virtual ~VertexBuffer() = default;
 
@@ -129,7 +131,7 @@ namespace Hazel {
 	};
 
 
-	class IndexBuffer {
+	class HAZEL_API IndexBuffer {
 	public:
 		virtual ~IndexBuffer() = default;
 

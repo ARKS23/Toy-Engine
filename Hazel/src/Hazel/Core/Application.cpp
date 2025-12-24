@@ -13,7 +13,6 @@
 #include "Hazel/Renderer/VertexArray.h"
 #include "Hazel/Renderer/Camera/PerspectiveCameraController.h"
 #include "Hazel/Renderer/RenderCommand.h"
-#include "Hazel/Test/RendererTestLayer.h"
 
 namespace Hazel {
 	//#define HZ_BIND_EVENT_FN(x) std::bind(&x, this, std::placeholders::_1)
@@ -36,9 +35,6 @@ namespace Hazel {
 
 		m_ImGuiLayer = new ImGuiLayer();
 		m_LayerStack.PushOverlay(m_ImGuiLayer); // ImGuiLayer «overlay
-
-		/* ≤‚ ‘ */
-		PushLayer(new CameraTestLayer());
 	}
 
 	Application::~Application(){}
@@ -96,105 +92,5 @@ namespace Hazel {
 		HZ_CORE_INFO("Application Close");
 		m_Running = false;
 		return true;
-	}
-
-
-	/* -------------------------------------- ≤‚ ‘∫Ø ˝ -------------------------------------------- */
-	void Application::TestRenderer() {
-		float vertices[] = {
-			// back face
-			-1.0f, -1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 0.0f, 0.0f, // bottom-left
-			 1.0f,  1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 1.0f, 1.0f, // top-right
-			 1.0f, -1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 1.0f, 0.0f, // bottom-right         
-			 1.0f,  1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 1.0f, 1.0f, // top-right
-			-1.0f, -1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 0.0f, 0.0f, // bottom-left
-			-1.0f,  1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 0.0f, 1.0f, // top-left
-			// front face
-			-1.0f, -1.0f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f, 0.0f, // bottom-left
-			 1.0f, -1.0f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f, 0.0f, // bottom-right
-			 1.0f,  1.0f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f, 1.0f, // top-right
-			 1.0f,  1.0f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f, 1.0f, // top-right
-			-1.0f,  1.0f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f, 1.0f, // top-left
-			-1.0f, -1.0f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f, 0.0f, // bottom-left
-			// left face
-			-1.0f,  1.0f,  1.0f, -1.0f,  0.0f,  0.0f, 1.0f, 0.0f, // top-right
-			-1.0f,  1.0f, -1.0f, -1.0f,  0.0f,  0.0f, 1.0f, 1.0f, // top-left
-			-1.0f, -1.0f, -1.0f, -1.0f,  0.0f,  0.0f, 0.0f, 1.0f, // bottom-left
-			-1.0f, -1.0f, -1.0f, -1.0f,  0.0f,  0.0f, 0.0f, 1.0f, // bottom-left
-			-1.0f, -1.0f,  1.0f, -1.0f,  0.0f,  0.0f, 0.0f, 0.0f, // bottom-right
-			-1.0f,  1.0f,  1.0f, -1.0f,  0.0f,  0.0f, 1.0f, 0.0f, // top-right
-			// right face
-			 1.0f,  1.0f,  1.0f,  1.0f,  0.0f,  0.0f, 1.0f, 0.0f, // top-left
-			 1.0f, -1.0f, -1.0f,  1.0f,  0.0f,  0.0f, 0.0f, 1.0f, // bottom-right
-			 1.0f,  1.0f, -1.0f,  1.0f,  0.0f,  0.0f, 1.0f, 1.0f, // top-right         
-			 1.0f, -1.0f, -1.0f,  1.0f,  0.0f,  0.0f, 0.0f, 1.0f, // bottom-right
-			 1.0f,  1.0f,  1.0f,  1.0f,  0.0f,  0.0f, 1.0f, 0.0f, // top-left
-			 1.0f, -1.0f,  1.0f,  1.0f,  0.0f,  0.0f, 0.0f, 0.0f, // bottom-left     
-			 // bottom face
-			 -1.0f, -1.0f, -1.0f,  0.0f, -1.0f,  0.0f, 0.0f, 1.0f, // top-right
-			  1.0f, -1.0f, -1.0f,  0.0f, -1.0f,  0.0f, 1.0f, 1.0f, // top-left
-			  1.0f, -1.0f,  1.0f,  0.0f, -1.0f,  0.0f, 1.0f, 0.0f, // bottom-left
-			  1.0f, -1.0f,  1.0f,  0.0f, -1.0f,  0.0f, 1.0f, 0.0f, // bottom-left
-			 -1.0f, -1.0f,  1.0f,  0.0f, -1.0f,  0.0f, 0.0f, 0.0f, // bottom-right
-			 -1.0f, -1.0f, -1.0f,  0.0f, -1.0f,  0.0f, 0.0f, 1.0f, // top-right
-			 // top face
-			 -1.0f,  1.0f, -1.0f,  0.0f,  1.0f,  0.0f, 0.0f, 1.0f, // top-left
-			  1.0f,  1.0f , 1.0f,  0.0f,  1.0f,  0.0f, 1.0f, 0.0f, // bottom-right
-			  1.0f,  1.0f, -1.0f,  0.0f,  1.0f,  0.0f, 1.0f, 1.0f, // top-right     
-			  1.0f,  1.0f,  1.0f,  0.0f,  1.0f,  0.0f, 1.0f, 0.0f, // bottom-right
-			 -1.0f,  1.0f, -1.0f,  0.0f,  1.0f,  0.0f, 0.0f, 1.0f, // top-left
-			 -1.0f,  1.0f,  1.0f,  0.0f,  1.0f,  0.0f, 0.0f, 0.0f  // bottom-left        
-		};
-
-		unsigned int indexArray[36];
-		for (int i = 0; i < 36; ++i) indexArray[i] = i;
-
-		const char* c_vertexSrc = R"(
-			#version 460 core
-			layout(location = 0) in vec3 aPos;
-
-			uniform mat4 u_ViewProjection;
-			uniform mat4 u_Transform;
-
-			void main() {
-				gl_Position = u_ViewProjection * u_Transform * vec4(aPos, 1.0);
-			} 
-		)";
-		const std::string vertexSrc(c_vertexSrc);
-
-		const char* c_fargmentSrc = R"(
-			#version 460 core
-			out vec4 FragColor;
-
-			void main() {
-				FragColor = vec4(1.0, 1.0, 1.0, 1.0);
-			}
-		)";
-		const std::string fragmentSrc(c_fargmentSrc);
-
-		Renderer::Init();
-
-		PerspectiveCameraController cameraController(45, 1920.f / 1080.f, 0.1f, 100.f);
-		PerspectiveCamera &camera = cameraController.GetCamera();
-
-		Ref<VertexArray> vertexArray = VertexArray::Create();
-		Ref<VertexBuffer> vertexBuffer = VertexBuffer::Create(vertices, sizeof(vertices));
-		BufferLayout layout = {
-			{ShaderDataType::Float3, "a_Position"},
-			{ShaderDataType::Float3, "a_Normal"},
-			{ShaderDataType::Float2, "a_Texcoords"}
-		};
-		Ref<IndexBuffer> indexBuffer = IndexBuffer::Create(indexArray, 36);
-		vertexBuffer->SetLayout(layout);
-		vertexArray->AddVertexBuffer(vertexBuffer);
-		vertexArray->SetIndexBuffer(indexBuffer);
-		Ref<Shader> shader = Shader::Create("testShader", vertexSrc, fragmentSrc);
-
-		Renderer::BeginScene(camera);
-		glm::mat4 transformMatrix(1.f);
-		transformMatrix = glm::translate(transformMatrix, glm::vec3(1.f, 2.f, 3.f));
-		transformMatrix = glm::scale(transformMatrix, glm::vec3(1.f));
-		Renderer::Submit(shader, vertexArray, transformMatrix);
-		Renderer::EndScene();
 	}
 };

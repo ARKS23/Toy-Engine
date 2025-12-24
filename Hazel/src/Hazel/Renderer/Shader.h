@@ -1,12 +1,13 @@
 #pragma once
 
+#include "Hazel/Core/Core.h"
+
 #include <string>
 #include <unordered_map>
-
 #include <glm/glm.hpp>
 
 namespace Hazel {
-	class Shader {
+	class HAZEL_API Shader {
 	public:
 		virtual ~Shader() = default;
 

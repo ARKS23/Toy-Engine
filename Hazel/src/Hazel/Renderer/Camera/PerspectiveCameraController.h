@@ -6,7 +6,7 @@
 #include "Hazel/Events/ApplicationEvent.h"
 
 namespace Hazel {
-	class PerspectiveCameraController {
+	class HAZEL_API PerspectiveCameraController {
 	public:
 		PerspectiveCameraController(float fov, float aspectRatio, float nearClip, float farClip);
 

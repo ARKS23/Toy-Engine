@@ -1,9 +1,10 @@
 #pragma once
+#include "Hazel/Core/Core.h"
 
 #include <glm/glm.hpp>
 
 namespace Hazel {
-	class Camera {
+	class HAZEL_API Camera {
 	public:
 		Camera() = default;
 		virtual ~Camera() = default;

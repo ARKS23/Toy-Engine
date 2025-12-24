@@ -1,4 +1,5 @@
 #pragma once
+#include "Hazel.h"
 #include "Hazel/Core/Core.h"
 #include "Hazel/Core/Layer.h"
 #include "Hazel/Renderer/Camera/PerspectiveCameraController.h"

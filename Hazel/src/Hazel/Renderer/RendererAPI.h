@@ -1,11 +1,12 @@
 #pragma once
 
+#include "Hazel/Core/Core.h"
 #include "Hazel/Renderer/VertexArray.h"
 
 #include <glm/glm.hpp>
 
 namespace Hazel {
-	class RendererAPI {
+	class HAZEL_API RendererAPI {
 	public:
 		enum class API {
 			// 定义支持的API

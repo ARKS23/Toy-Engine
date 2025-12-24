@@ -28,7 +28,7 @@ namespace Hazel {
 
 	private:
 		/* ²âÊÔº¯Êý */
-		void TestRenderer();
+		//void TestRenderer();
 
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);

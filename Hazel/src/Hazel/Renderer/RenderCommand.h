@@ -4,7 +4,7 @@
 
 namespace Hazel {
 	/* 这个类调用图形API: 不关心底层使用什么API */
-	class RenderCommand {
+	class HAZEL_API RenderCommand {
 	public:
 		static void Init();
 		static void SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height);

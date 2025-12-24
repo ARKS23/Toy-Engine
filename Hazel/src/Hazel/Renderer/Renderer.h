@@ -1,11 +1,13 @@
 #pragma once
 
+#include "Hazel/Core/Core.h"
+
 #include "Hazel/Renderer/RendererAPI.h"
 #include "Hazel/Renderer/Shader.h"
 #include "Hazel/Renderer/Camera/Camera.h"
 
 namespace Hazel {
-	class Renderer {
+	class HAZEL_API Renderer {
 	public:
 		static void Init();
 		static void Shutdown();

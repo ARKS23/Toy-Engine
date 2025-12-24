@@ -1,4 +1,5 @@
 #include "Hazel.h" 
+#include "CameraTestLayer.h"
 
 // 客户端自定义层
 class ExampleLayer : public Hazel::Layer {
@@ -34,6 +35,7 @@ class Sandbox : public Hazel::Application {
 public:
 	Sandbox() {
 		PushLayer(new ExampleLayer());
+		PushLayer(new Hazel::CameraTestLayer());
 	}
 
 	~Sandbox() {
