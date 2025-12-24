@@ -9,7 +9,7 @@
 /* 测试 */
 #include "Hazel/Renderer/Renderer.h"
 #include "Hazel/Renderer/VertexArray.h"
-#include "Hazel/Renderer/Camera/PerspectiveCamera.h"
+#include "Hazel/Renderer/Camera/PerspectiveCameraController.h"
 #include "Hazel/Renderer/RenderCommand.h"
 
 namespace Hazel {
@@ -46,14 +46,11 @@ namespace Hazel {
 			for (Layer* layer : m_LayerStack) 
 				layer->OnUpdate();
 
-			// ImGui渲染（UI逻辑）
+			/* --------------------------------- ImGui渲染（UI逻辑）--------------------------------- */
 			m_ImGuiLayer->Begin(); // 开启UI帧铺画布
 			for (Layer* layer : m_LayerStack)
 				layer->OnImGuiRender(); // 各层在画布上绘制
 			m_ImGuiLayer->End();	// 画好的提交给CPU处理
-
-			/* 测试 */
-			TestRenderer();
 
 			m_Window->OnUpdate();
 		}
@@ -167,8 +164,8 @@ namespace Hazel {
 
 		Renderer::Init();
 
-		PerspectiveCamera camera(45, 1920.f / 1080.f, 0.1f, 100.f);
-		camera.SetPotion(glm::vec3(0.f, 3.f, 10.f));
+		PerspectiveCameraController cameraController(45, 1920.f / 1080.f, 0.1f, 100.f);
+		PerspectiveCamera &camera = cameraController.GetCamera();
 
 		Ref<VertexArray> vertexArray = VertexArray::Create();
 		Ref<VertexBuffer> vertexBuffer = VertexBuffer::Create(vertices, sizeof(vertices));

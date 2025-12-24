@@ -3,6 +3,7 @@
 
 namespace Hazel {
 	PerspectiveCamera::PerspectiveCamera(float fov, float aspectRatio, float nearClip, float farClip) {
+		/* 构造函数中做变换矩阵计算和本地坐标系初始化 */
 		SetProjectionMatrix(fov, aspectRatio, nearClip, farClip);
 		UpdateCameraVectors();
 	}
