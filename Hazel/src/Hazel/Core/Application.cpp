@@ -4,6 +4,8 @@
 #include "Hazel/Core/Input.h"
 #include "Hazel/Events/ApplicationEvent.h"
 
+#include "Hazel/Utils/PlatformUtils.h"
+
 #include <GLFW/glfw3.h>
 
 /* 测试 */
@@ -11,6 +13,7 @@
 #include "Hazel/Renderer/VertexArray.h"
 #include "Hazel/Renderer/Camera/PerspectiveCameraController.h"
 #include "Hazel/Renderer/RenderCommand.h"
+#include "Hazel/Test/RendererTestLayer.h"
 
 namespace Hazel {
 	//#define HZ_BIND_EVENT_FN(x) std::bind(&x, this, std::placeholders::_1)
@@ -33,18 +36,25 @@ namespace Hazel {
 
 		m_ImGuiLayer = new ImGuiLayer();
 		m_LayerStack.PushOverlay(m_ImGuiLayer); // ImGuiLayer是overlay
+
+		/* 测试 */
+		PushLayer(new CameraTestLayer());
 	}
 
 	Application::~Application(){}
 
 	void Application::Run() {
 		while (m_Running) {
+			float time = Time::GetTime();
+			Timestep timestep = time - m_LastFrameTime;
+			m_LastFrameTime = time;
+
 			RenderCommand::SetClearColor(glm::vec4(0.3, 0.2, 0.5, 1));
 			RenderCommand::Clear();
 
 			// update顺序:从下往上更新游戏逻辑，与事件的传播顺序是相反的
 			for (Layer* layer : m_LayerStack) 
-				layer->OnUpdate();
+				layer->OnUpdate(timestep);
 
 			/* --------------------------------- ImGui渲染（UI逻辑）--------------------------------- */
 			m_ImGuiLayer->Begin(); // 开启UI帧铺画布

@@ -38,6 +38,7 @@ namespace Hazel {
 		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running = true;
 		LayerStack m_LayerStack; // 层栈容器，管理所有层的生命周期
+		float m_LastFrameTime = 0.f; // 用于处理帧间时长
 
 	private:
 		static Application* s_Instance; // 单例Application

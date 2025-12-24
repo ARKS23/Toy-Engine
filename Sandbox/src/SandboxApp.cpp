@@ -6,7 +6,7 @@ public:
 	ExampleLayer() : Layer("Example") {}
 
 public:
-	void OnUpdate() override {
+	virtual void OnUpdate(Hazel::Timestep ts) override {
 
 	}
 
@@ -28,6 +28,8 @@ public:
 	}
 };
 
+
+/* 客户端自定义App */
 class Sandbox : public Hazel::Application {
 public:
 	Sandbox() {

@@ -1,6 +1,7 @@
 #pragma once
 #include "Hazel/Core/Core.h"
 #include "Hazel/Events/Event.h"
+#include "Hazel/Core/Timestep.h"
 
 namespace Hazel {
 	/* 设计Layer作为一套标准接口，想成为layer的东西需要继承layer */
@@ -18,7 +19,7 @@ namespace Hazel {
 		virtual void OnImGuiRender() {}
 
 		/* 核心循环方法 */
-		virtual void OnUpdate() {} // 每帧更新:用于处理游戏逻辑、位置移动、渲染物体
+		virtual void OnUpdate(Timestep ts) {} // 每帧更新:用于处理游戏逻辑、位置移动、渲染物体
 		virtual void OnEvent(Event &event) {} // 事件处理: 响应鼠标点击、按键键盘等事件
 
 		inline const std::string& GetName() const { return m_DebugName; } // 调试用
