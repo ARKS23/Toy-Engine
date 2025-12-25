@@ -1,5 +1,5 @@
 #include "Hazel.h" 
-#include "CameraTestLayer.h"
+#include "Test/CameraTestLayer.h"
 
 // 客户端自定义层
 class ExampleLayer : public Hazel::Layer {

@@ -14,6 +14,8 @@ namespace Hazel {
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress); // 初始化GLAD
 		HZ_CORE_ASSERT(status, "Failed to initialize Glad!");
 
+		//glfwSetInputMode(m_WindowHandle, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // 关闭鼠标
+
 		HZ_CORE_INFO("OpenGL Info:"); // 打印软硬件信息
 		HZ_CORE_INFO("Vendor:{0}", (const char*)glGetString(GL_VENDOR));
 		HZ_CORE_INFO("Renderer:{0}", (const char*)glGetString(GL_RENDERER));
