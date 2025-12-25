@@ -24,6 +24,7 @@
 #include "Hazel/Renderer/Camera/PerspectiveCameraController.h"
 #include "Hazel/Renderer/RenderCommand.h"
 #include "Hazel/Renderer/Buffer.h"
+#include "Hazel/Renderer/Texture.h"
 
 // ----------------------- ‰÷»æ -------------------------------
 

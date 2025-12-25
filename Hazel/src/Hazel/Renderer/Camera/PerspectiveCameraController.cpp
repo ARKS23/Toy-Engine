@@ -47,7 +47,7 @@ namespace Hazel {
 
 			// ·ÀÍòÏòËÀËø
 			if (pitch > 89.f) pitch = 89.f;
-			if (yaw < -89.f) yaw = -89.f;
+			if (pitch < -89.f) pitch = -89.f;
 
 			m_Camera.SetYaw(yaw);
 			m_Camera.SetPitch(pitch);
