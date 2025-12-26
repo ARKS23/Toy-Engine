@@ -39,7 +39,7 @@ namespace Hazel {
 
 	private:
 		std::string ReadFile(const std::string& filepath);
-		std::unordered_map<GLenum, std::string> PreProcess(const std::string& source);
+		void PreProcess(const std::string& source);
 
 		void CompileOrGetVulkanBinaries(const std::unordered_map<GLenum, std::string>& shaderSources); // SPIR-V
 		void CompileOrGetOpenGLBinaries();

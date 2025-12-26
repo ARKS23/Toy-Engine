@@ -66,43 +66,11 @@ namespace Hazel {
 			unsigned int indexArray[36];
 			for (int i = 0; i < 36; ++i) indexArray[i] = i;
 
-			const char* c_vertexSrc = R"(
-			#version 460 core
-			layout(location = 0) in vec3 aPos;
-			layout(location = 1) in vec3 aNormal;
-			layout(location = 2) in vec2 aTexCoords;
-
-			out vec2 TexCoords;
-
-			uniform mat4 u_ViewProjection;
-			uniform mat4 u_Transform;
-
-			void main() {
-				TexCoords = aTexCoords;
-				gl_Position = u_ViewProjection * u_Transform * vec4(aPos, 1.0);
-			} 
-		)";
-			const std::string vertexSrc(c_vertexSrc);
-
-			const char* c_fargmentSrc = R"(
-			#version 460 core
-			out vec4 FragColor;
-		
-			in vec2 TexCoords;
-
-			uniform sampler2D u_Texture;
-
-			void main() {
-				// FragColor = vec4(1.0, 1.0, 1.0, 1.0);
-				FragColor = texture(u_Texture, TexCoords);
-			}
-		)";
-			const std::string fragmentSrc(c_fargmentSrc);
-
 			Hazel::Renderer::Init();
 
 			// 创建Shader
-			m_Shader = Hazel::Shader::Create("CubeShader", vertexSrc, fragmentSrc);
+			const std::string srcPath = "assets/shaders/TestShader.glsl";
+			m_Shader = Hazel::Shader::Create(srcPath);
 
 			// 创建VAO,VBO,EBO
 			m_VertexArray = Hazel::VertexArray::Create();
@@ -118,7 +86,7 @@ namespace Hazel {
 			m_VertexArray->SetIndexBuffer(indexBuffer);
 
 			// 创建纹理
-			const std::string path = "E:/ComputerGraphics/OpenGLProject/OpenGLProject/img4project/container2.png";
+			const std::string path = "assets/textures/container2.png";
 			m_Texture = Hazel::Texture2D::Create(path);
 		}
 

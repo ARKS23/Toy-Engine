@@ -2,9 +2,20 @@
 #include "OpenGLShader.h"
 
 namespace Hazel {
+	static GLenum ShaderTypeFromString(const std::string& type) {
+		if (type == "vertex") return GL_VERTEX_SHADER;
+		if (type == "fragment" || type == "pixel") return GL_FRAGMENT_SHADER;
+
+		HZ_CORE_ASSERT(false, "Unknown shader type!");
+		return 0;
+	}
+
 	OpenGLShader::OpenGLShader(const std::string& filepath) : m_FilePath(filepath) {
-		// TODO: 单文件shader
-		HZ_CORE_WARN("TODO: single file constructor");
+		// TODO: 单文件shader，vertex shader 和 fragment shader在同一文件，用#type fragment分割
+		
+		std::string source = ReadFile(filepath);
+		PreProcess(source);
+		CreateProgram();
 	}
 
 	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc) : m_Name(name){
@@ -109,26 +120,64 @@ namespace Hazel {
 		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
 	}
 
-	std::string OpenGLShader::ReadFile(const std::string& filepath)
-	{
-		// 待实现
-		return std::string();
+	std::string OpenGLShader::ReadFile(const std::string& filepath) {
+		std::string result;
+		std::ifstream in(filepath, std::ios::in | std::ios::binary); 
+
+		if (in) {
+			in.seekg(0, std::ios::end);
+			size_t size = in.tellg(); // 获取文件大小
+
+			if (size != -1) {
+				result.resize(size);
+				in.seekg(0, std::ios::beg); // 回到开头
+				in.read(&result[0], size);  // 读取到result
+				in.close();
+			}
+			else {
+				HZ_CORE_ERROR("Could not read from file {0}", filepath);
+			}
+		}
+		else {
+			HZ_CORE_ERROR("Could not read from file {0}", filepath);
+		}
+
+		return result;
 	}
 
-	std::unordered_map<GLenum, std::string> OpenGLShader::PreProcess(const std::string& source)
-	{
-		// 待实现
-		return std::unordered_map<GLenum, std::string>();
+	void OpenGLShader::PreProcess(const std::string& source) {
+		const char* typeToken = "#type";
+		size_t typeTokenLength = strlen(typeToken);
+		size_t pos = source.find(typeToken, 0); // 查找第一个#type
+
+		while (pos != std::string::npos) {
+			// 找到目前行的末尾
+			size_t eol = source.find_first_of("\r\n", pos);
+			HZ_CORE_ASSERT(eol != std::string::npos, "Syntax error");
+
+			// 提取类型名称
+			size_t begin = pos + typeTokenLength + 1; // 跳过#type
+			std::string type = source.substr(begin, eol - begin);
+			HZ_CORE_ASSERT(ShaderTypeFromString(type), "Invalid shader type specification");
+
+			// 查找下一个#type的位置或文件末尾
+			size_t nextLinePos = source.find_first_not_of("\r\n", eol); // 跳过换行符
+			HZ_CORE_ASSERT(nextLinePos != std::string::npos, "Syntax error");
+			pos = source.find(typeToken, nextLinePos); // 找下一个 #type
+
+			// 获取源码片段
+			m_OpenGLSourceCode[ShaderTypeFromString(type)] = (pos == std::string::npos) ? source.substr(nextLinePos) : source.substr(nextLinePos, pos - nextLinePos);
+		}
 	}
 
 	void OpenGLShader::CompileOrGetVulkanBinaries(const std::unordered_map<GLenum, std::string>& shaderSources)
 	{
-		// 待实现
+		// TODO:待实现
 	}
 
 	void OpenGLShader::CompileOrGetOpenGLBinaries()
 	{
-		// 待实现
+		// TODO:待实现
 	}
 
 	void OpenGLShader::CreateProgram() {

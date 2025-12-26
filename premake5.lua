@@ -126,6 +126,8 @@ project "Sandbox"
 		"Hazel"
 	}
 
+	debugdir "Sandbox" -- 设置调试工作目录为Sandbox文件夹，这样相对路径从Sandbox开始找
+
 	filter "system:windows"
 		cppdialect "C++17"
 		staticruntime "On"
