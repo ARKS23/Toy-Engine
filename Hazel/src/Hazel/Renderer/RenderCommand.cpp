@@ -27,8 +27,17 @@ namespace Hazel {
 		s_RendererAPI->DrawLines(VertexArray, vertexCount);
 	}
 
+	void RenderCommand::DrawTriangles(const Ref<VertexArray>& VertexArray, uint32_t vertexCount)
+	{
+		s_RendererAPI->DrawTriangles(VertexArray, vertexCount);
+	}
+
 	void RenderCommand::SetLineWidth(float width) {
 		s_RendererAPI->SetLineWidth(width);
+	}
+
+	void RenderCommand::SetDepthFunc(RendererAPI::DepthFunc func) {
+		s_RendererAPI->SetDepthFunc(func);
 	}
 
 	Hazel::Scope<Hazel::RendererAPI> RenderCommand::s_RendererAPI = RendererAPI::Create();

@@ -107,4 +107,97 @@ namespace Hazel {
 		glBindTextureUnit(slot, m_RendererID); // 不用老式的Activate + Bind
 	}
 
+	/* ------------------------------------ TextureCubeMap ------------------------------------- */
+	OpenGLTextureCubeMap::OpenGLTextureCubeMap(const TextureSpecification& specification)
+	: m_Specification(specification), m_Width(specification.Width), m_Height(specification.Height){
+		m_InternalFormat = Utils::HazelImageFormatToGLInteralFormat(specification.Format);
+		m_DataFormat = Utils::HazelImageFormatToGLDataFormat(specification.Format);
+
+		glCreateTextures(GL_TEXTURE_CUBE_MAP, 1, &m_RendererID);
+		glTextureStorage2D(m_RendererID, 1, m_InternalFormat, m_Width, m_Height); // 新版本自动为6面分配内存
+
+		
+		// TODO: 后续加入纹理过滤方式和包裹方式调整
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	}
+
+	OpenGLTextureCubeMap::OpenGLTextureCubeMap(const std::string& dir) : m_Path(dir){
+		std::vector<std::string> paths(CreateFromDirectory(dir));
+		HZ_CORE_ASSERT(paths.size() == 6, "CubeMap must have 6 textures!");
+		LoadFromPaths(paths);
+	}
+
+	OpenGLTextureCubeMap::~OpenGLTextureCubeMap() {
+		glDeleteTextures(1, &m_RendererID);
+	}
+
+	void OpenGLTextureCubeMap::SetData(void* data, uint32_t size) {
+		// TODO
+	}
+
+	void OpenGLTextureCubeMap::Bind(uint32_t slot /*= 0*/) const {
+		glBindTextureUnit(slot, m_RendererID);
+	}
+
+	void OpenGLTextureCubeMap::LoadFromPaths(std::vector<std::string> paths) {
+		int width, height, channels;
+		stbi_uc* data = stbi_load(paths[0].c_str(), &width, &height, &channels, 0);
+		m_Width = width; m_Height = height;
+
+		if (channels == 4) {
+			m_InternalFormat = GL_RGBA8;
+			m_DataFormat = GL_RGBA;
+		}
+		else if (channels == 3) {
+			m_InternalFormat = GL_RGB8;
+			m_DataFormat = GL_RGB;
+		}
+
+		stbi_image_free(data); // 拿完元数据释放内存
+
+		glCreateTextures(GL_TEXTURE_CUBE_MAP, 1, &m_RendererID);
+		glTextureStorage2D(m_RendererID, 1, m_InternalFormat, m_Width, m_Height);
+		glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+		for (int i = 0; i < 6; ++i) {
+			stbi_uc* faceData = stbi_load(paths[i].c_str(), &width, &height, &channels, 0);
+			HZ_CORE_ASSERT(faceData, "Failed to load cubemap face!");
+
+			// 上传到指定的面
+			glTextureSubImage3D(
+				m_RendererID,
+				0,					// Mip level
+				0, 0, i,			// x,y,z offset, z Offset是层级偏移，就是面数
+				m_Width, m_Height,
+				1,					// depth (一次传一张)
+				m_DataFormat,
+				GL_UNSIGNED_BYTE,
+				faceData
+			);
+
+			stbi_image_free(faceData);
+		}
+	}
+
+	std::vector<std::string> OpenGLTextureCubeMap::CreateFromDirectory(const std::string& dir)
+	{
+		std::vector<std::string> paths;
+		paths.push_back(dir + "/right.jpg");
+		paths.push_back(dir + "/left.jpg");
+		paths.push_back(dir + "/top.jpg");
+		paths.push_back(dir + "/bottom.jpg");
+		paths.push_back(dir + "/front.jpg");
+		paths.push_back(dir + "/back.jpg");
+
+		return paths;
+	}
+
 }

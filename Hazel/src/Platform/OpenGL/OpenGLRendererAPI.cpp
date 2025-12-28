@@ -35,8 +35,47 @@ namespace Hazel {
 		glDrawArrays(GL_LINES, 0, vertexCount);
 	}
 
+	void OpenGLRendererAPI::DrawTriangles(const Ref<VertexArray>& VertexArray, uint32_t vertexCount) {
+		VertexArray->Bind();
+		glDrawArrays(GL_TRIANGLES, 0, vertexCount);
+	}
+
 	void OpenGLRendererAPI::SetLineWidth(float width) {
 		glLineWidth(width);
+	}
+
+	void OpenGLRendererAPI::SetDepthFunc(DepthFunc func) {
+		GLenum glFunc = GL_LESS;
+		switch (func)
+		{
+			case Hazel::RendererAPI::DepthFunc::Never:
+				glFunc = GL_NEVER;
+				break;
+			case Hazel::RendererAPI::DepthFunc::Less:
+				glFunc = GL_LESS;
+				break;
+			case Hazel::RendererAPI::DepthFunc::Equal:
+				glFunc = GL_EQUAL;
+				break;
+			case Hazel::RendererAPI::DepthFunc::Lequal:
+				glFunc = GL_LEQUAL;
+				break;
+			case Hazel::RendererAPI::DepthFunc::Greater:
+				glFunc = GL_GREATER;
+				break;
+			case Hazel::RendererAPI::DepthFunc::Notequal:
+				glFunc = GL_NOTEQUAL;
+				break;
+			case Hazel::RendererAPI::DepthFunc::Gequal:
+				glFunc = GL_GEQUAL;
+				break;
+			case Hazel::RendererAPI::DepthFunc::Always:
+				glFunc = GL_ALWAYS;
+				break;
+			default:
+				HZ_CORE_ASSERT(false, "Unknown Depth Func");
+		}
+		glDepthFunc(glFunc);
 	}
 
 }

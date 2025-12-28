@@ -12,7 +12,9 @@ namespace Hazel {
 		static void Clear();
 		static void DrawIndexed(const Ref<VertexArray>& vertexArray, uint32_t indexCount = 0);
 		static void DrawLines(const Ref<VertexArray>& VertexArray, uint32_t vertexCount);
+		static void DrawTriangles(const Ref<VertexArray>& VertexArray, uint32_t vertexCount);
 		static void SetLineWidth(float width);
+		static void SetDepthFunc(RendererAPI::DepthFunc func); // 设置深度比较偏序关系
 
 	private:
 		static Scope<RendererAPI> s_RendererAPI; // 编译文件中初始化

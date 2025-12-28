@@ -63,6 +63,51 @@ namespace Hazel {
 				-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f
 			};
 
+			float skyboxVertices[] = {
+				// positions          
+				-1.0f,  1.0f, -1.0f,
+				-1.0f, -1.0f, -1.0f,
+				 1.0f, -1.0f, -1.0f,
+				 1.0f, -1.0f, -1.0f,
+				 1.0f,  1.0f, -1.0f,
+				-1.0f,  1.0f, -1.0f,
+
+				-1.0f, -1.0f,  1.0f,
+				-1.0f, -1.0f, -1.0f,
+				-1.0f,  1.0f, -1.0f,
+				-1.0f,  1.0f, -1.0f,
+				-1.0f,  1.0f,  1.0f,
+				-1.0f, -1.0f,  1.0f,
+
+				 1.0f, -1.0f, -1.0f,
+				 1.0f, -1.0f,  1.0f,
+				 1.0f,  1.0f,  1.0f,
+				 1.0f,  1.0f,  1.0f,
+				 1.0f,  1.0f, -1.0f,
+				 1.0f, -1.0f, -1.0f,
+
+				-1.0f, -1.0f,  1.0f,
+				-1.0f,  1.0f,  1.0f,
+				 1.0f,  1.0f,  1.0f,
+				 1.0f,  1.0f,  1.0f,
+				 1.0f, -1.0f,  1.0f,
+				-1.0f, -1.0f,  1.0f,
+
+				-1.0f,  1.0f, -1.0f,
+				 1.0f,  1.0f, -1.0f,
+				 1.0f,  1.0f,  1.0f,
+				 1.0f,  1.0f,  1.0f,
+				-1.0f,  1.0f,  1.0f,
+				-1.0f,  1.0f, -1.0f,
+
+				-1.0f, -1.0f, -1.0f,
+				-1.0f, -1.0f,  1.0f,
+				 1.0f, -1.0f, -1.0f,
+				 1.0f, -1.0f, -1.0f,
+				-1.0f, -1.0f,  1.0f,
+				 1.0f, -1.0f,  1.0f
+			};
+
 			unsigned int indexArray[36];
 			for (int i = 0; i < 36; ++i) indexArray[i] = i;
 
@@ -71,6 +116,8 @@ namespace Hazel {
 			// 创建Shader
 			const std::string srcPath = "assets/shaders/TestShader.glsl";
 			m_Shader = Hazel::Shader::Create(srcPath);
+			const std::string skyboxSrcPath = "assets/shaders/skybox.glsl";
+			m_skyBoxShader = Hazel::Shader::Create(skyboxSrcPath);
 
 			// 创建VAO,VBO,EBO
 			m_VertexArray = Hazel::VertexArray::Create();
@@ -85,9 +132,22 @@ namespace Hazel {
 			m_VertexArray->AddVertexBuffer(vertexBuffer);
 			m_VertexArray->SetIndexBuffer(indexBuffer);
 
+			m_SkyBoxVAO = Hazel::VertexArray::Create();
+			Hazel::Ref<Hazel::VertexBuffer> SkyboxVertexBuffer = Hazel::VertexBuffer::Create(skyboxVertices, sizeof(skyboxVertices));
+			Hazel::BufferLayout skyboxLayout = {
+				{Hazel::ShaderDataType::Float3, "a_Position"}
+			};
+			SkyboxVertexBuffer->SetLayout(skyboxLayout);
+			m_SkyBoxVAO->AddVertexBuffer(SkyboxVertexBuffer);
+
+
 			// 创建纹理
 			const std::string path = "assets/textures/container2.png";
 			m_Texture = Hazel::Texture2D::Create(path);
+
+			// 创建天空盒纹理
+			const std::string skyBoxPath = "assets/skybox/Scene_Lake";
+			m_SkyboxTexture = Hazel::TextureCubeMap::Create(skyBoxPath);
 		}
 
 		virtual void OnUpdate(Hazel::Timestep ts) {
@@ -105,6 +165,12 @@ namespace Hazel {
 			transformMatrix = glm::scale(transformMatrix, glm::vec3(1.f));
 			Hazel::Renderer::Submit(m_Shader, m_VertexArray, transformMatrix);
 			Hazel::Renderer::EndScene();
+
+			// 天空盒
+			m_skyBoxShader->Bind();
+			m_skyBoxShader->SetMat4("u_Projection", m_PerspectiveCameraController.GetCamera().GetProjectionMatrix());
+			m_skyBoxShader->SetMat4("u_View", m_PerspectiveCameraController.GetCamera().GetViewMatrix());
+			Hazel::Renderer::DrawSkybox(m_skyBoxShader, m_SkyBoxVAO, m_SkyboxTexture);
 		}
 
 		virtual void OnEvent(Hazel::Event& e) {
@@ -113,8 +179,11 @@ namespace Hazel {
 
 	private:
 		Hazel::Ref<Hazel::Shader> m_Shader;
+		Hazel::Ref<Hazel::Shader> m_skyBoxShader;
 		Hazel::Ref<Hazel::VertexArray> m_VertexArray;
+		Hazel::Ref<Hazel::VertexArray> m_SkyBoxVAO;
 		Hazel::Ref<Hazel::Texture2D> m_Texture;
+		Hazel::Ref<Hazel::TextureCubeMap> m_SkyboxTexture;
 		Hazel::PerspectiveCameraController m_PerspectiveCameraController;
 	};
 }

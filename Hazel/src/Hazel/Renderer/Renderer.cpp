@@ -33,5 +33,16 @@ namespace Hazel {
 		RenderCommand::DrawIndexed(vertexArray);
 	}
 
+	void Renderer::DrawSkybox(const Ref<Shader>& shader, const Ref<VertexArray>& va, const Ref<TextureCubeMap>& skyboxTexture) {
+		RenderCommand::SetDepthFunc(RendererAPI::DepthFunc::Lequal); // 天空盒最大深度需要
+		shader->Bind();
+		shader->SetInt("u_SkyboxSampler", 0);
+		skyboxTexture->Bind(0); // sampler槽位设置
+		va->Bind();
+		//RenderCommand::DrawIndexed(va);
+		RenderCommand::DrawTriangles(va, 36);
+		RenderCommand::SetDepthFunc(RendererAPI::DepthFunc::Less);	// 恢复正常比较
+	}
+
 	Scope<Renderer::SceneData> Renderer::s_SceneData = CreateScope<Renderer::SceneData>(); // 静态成员初始化
 }

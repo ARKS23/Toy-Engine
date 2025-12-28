@@ -33,4 +33,32 @@ namespace Hazel {
 		return nullptr;
 	}
 
+	Hazel::Ref<Hazel::TextureCubeMap> TextureCubeMap::Create(const TextureSpecification& specification)
+	{
+		switch (Renderer::GetAPI())
+		{
+			case RendererAPI::API::None:
+				HZ_CORE_ASSERT(false, "RendererAPI::None is currently not supported!"); return nullptr;
+			case RendererAPI::API::OpenGL:
+				return CreateRef<OpenGLTextureCubeMap>(specification);
+		}
+
+		HZ_CORE_ASSERT(false, "Unknown RendererAPI!");
+		return nullptr;
+	}
+
+	Hazel::Ref<Hazel::TextureCubeMap> TextureCubeMap::Create(const std::string& path)
+	{
+		switch (Renderer::GetAPI())
+		{
+			case RendererAPI::API::None:
+				HZ_CORE_ASSERT(false, "RendererAPI::None is currently not supported!"); return nullptr;
+			case RendererAPI::API::OpenGL:
+				return CreateRef<OpenGLTextureCubeMap>(path);
+		}
+
+		HZ_CORE_ASSERT(false, "Unknown RendererAPI!");
+		return nullptr;
+	}
+
 }

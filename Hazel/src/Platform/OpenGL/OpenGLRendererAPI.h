@@ -12,8 +12,10 @@ namespace Hazel {
 
 		virtual void DrawIndex(const Ref<VertexArray>& VertexArray, uint32_t indexCount = 0) override;
 		virtual void DrawLines(const Ref<VertexArray>& VertexArray, uint32_t vertexCount) override;
+		virtual void DrawTriangles(const Ref<VertexArray>& VertexArray, uint32_t vertexCount) override;
 
 		virtual void SetLineWidth(float width) override;
+		virtual void SetDepthFunc(DepthFunc func) override;
 	};
 }
 

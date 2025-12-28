@@ -150,6 +150,11 @@ namespace Hazel {
 		size_t typeTokenLength = strlen(typeToken);
 		size_t pos = source.find(typeToken, 0); // 查找第一个#type
 
+		if (pos == std::string::npos) {
+			HZ_CORE_ERROR("Shader PreProcess failed: No '#type' token found in shader file! Check spelling?");
+			return;
+		}
+
 		while (pos != std::string::npos) {
 			// 找到目前行的末尾
 			size_t eol = source.find_first_of("\r\n", pos);

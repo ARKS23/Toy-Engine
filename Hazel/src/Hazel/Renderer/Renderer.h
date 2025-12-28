@@ -5,6 +5,7 @@
 #include "Hazel/Renderer/RendererAPI.h"
 #include "Hazel/Renderer/Shader.h"
 #include "Hazel/Renderer/Camera/Camera.h"
+#include "Hazel/Renderer/Texture.h"
 
 namespace Hazel {
 	class HAZEL_API Renderer {
@@ -21,6 +22,9 @@ namespace Hazel {
 		static void Submit(const Ref<Shader>& shader, const Ref<VertexArray>& vertexArray, const glm::mat4& transform = glm::mat4(1.f)); // 提交数据进行渲染
 
 		static RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); }
+
+	public:
+		static void DrawSkybox(const Ref<Shader>& shader, const Ref<VertexArray>& va, const Ref<TextureCubeMap>& skyboxTexture);
 
 	private:
 		struct SceneData

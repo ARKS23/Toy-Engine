@@ -14,6 +14,19 @@ namespace Hazel {
 			OpenGL = 1
 		};
 
+		enum class DepthFunc {
+			// 定义引擎的深度比较枚举
+			None = 0, 
+			Never, 
+			Less, 
+			Equal, 
+			Lequal, 
+			Greater, 
+			Notequal, 
+			Gequal, 
+			Always
+		};
+
 	public:
 		virtual ~RendererAPI() = default;
 
@@ -25,8 +38,10 @@ namespace Hazel {
 		/* 核心绘制指令 */
 		virtual void DrawIndex(const Ref<VertexArray>& VertexArray, uint32_t indexCount = 0) = 0;	// 用索引来绘制，默认传入0表示绘制整个EBO
 		virtual void DrawLines(const Ref<VertexArray>& VertexArray, uint32_t vertexCount) = 0;		// 调试渲染，绘制线框
+		virtual void DrawTriangles(const Ref<VertexArray>& VertexArray, uint32_t vertexCount) = 0;
 
 		virtual void SetLineWidth(float width) = 0; // 设置线框大小
+		virtual void SetDepthFunc(DepthFunc func) = 0; // 设置深度比较偏序关系
 
 		static API GetAPI() { return s_API; } // 静态方法获取当前API
 		static Scope<RendererAPI> Create();	  // 静态工厂方法

@@ -42,5 +42,11 @@ namespace Hazel {
 		static Ref<Texture2D> Create(const TextureSpecification& specification); // 创建指定参数的纹理，然后通过SetData程序化填充
 		static Ref<Texture2D> Create(const std::string& path); // 从系统加载纹理
 	};
+
+	class HAZEL_API TextureCubeMap : public Texture {
+	public:
+		static Ref<TextureCubeMap> Create(const TextureSpecification& specification);
+		static Ref<TextureCubeMap> Create(const std::string& path);
+	};
 }
 
