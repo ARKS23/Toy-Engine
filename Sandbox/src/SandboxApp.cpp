@@ -36,8 +36,8 @@ class Sandbox : public Hazel::Application {
 public:
 	Sandbox() {
 		PushLayer(new ExampleLayer());
-		PushLayer(new Hazel::CameraTestLayer());
-		//PushLayer(new FramebufferTestLayer());
+		PushLayer(new Hazel::CameraTestLayer()); // ≤‚ ‘…„œÒª˙
+		PushLayer(new FramebufferTestLayer()); // ≤‚ ‘÷°ª∫≥Â
 	}
 
 	~Sandbox() {

@@ -16,30 +16,32 @@ public:
 
 	virtual void OnAttach() override {
 		Hazel::FramebufferSpecification fboSpec;
-		fboSpec.Width = 1280;
-		fboSpec.Height = 720;
+		fboSpec.Width = 1920;
+		fboSpec.Height = 1080;
 		fboSpec.Attachments = {
 			Hazel::FramebufferTextureFormat::RGBA8,
 			Hazel::FramebufferTextureFormat::RED_INTEGER,
 			Hazel::FramebufferTextureFormat::Depth
 		};
 		m_Framebuffer = Hazel::Framebuffer::Create(fboSpec);
+
+		this->Init();
 	}
 
 	virtual void OnImGuiRender() override {
 		ImGui::Begin("Viewport Testing");
 		uint32_t textureID = m_Framebuffer->GetColorAttachmentRendererID(0);
 		// 在 ImGui 窗口里画出这张图
-		ImGui::Image((void*)(uintptr_t)textureID, ImVec2{ 1280, 720 }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+		ImGui::Image((void*)(uintptr_t)textureID, ImVec2{ 1920, 1080 }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 		ImGui::End();
 	}
 
 	virtual void OnUpdate(Hazel::Timestep ts) override{
-		// 这里简测试，实际应该配合 OnWindowResize 事件
+		// 这里简化测试，实际应该配合 OnWindowResize 事件
 		if (Hazel::FramebufferSpecification spec = m_Framebuffer->GetSpecification();
-			spec.Width != 1280 || spec.Height != 720)
+			spec.Width != 1920 || spec.Height != 1080)
 		{
-			m_Framebuffer->Resize(1280, 720);
+			m_Framebuffer->Resize(1920, 1080);
 		}
 
 		m_Framebuffer->Bind();
@@ -183,6 +185,10 @@ private:
 		// 创建天空盒纹理
 		const std::string skyBoxPath = "assets/skybox/Scene_Lake";
 		m_SkyboxTexture = Hazel::TextureCubeMap::Create(skyBoxPath);
+	}
+
+	virtual void OnEvent(Hazel::Event& e) override{
+		m_PerspectiveCameraController.OnEvent(e);
 	}
 
 private:
