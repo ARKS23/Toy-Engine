@@ -9,6 +9,9 @@
     <ClInclude Include="src\Test\CameraTestLayer.h">
       <Filter>Test</Filter>
     </ClInclude>
+    <ClInclude Include="src\Test\FramebufferTestLayer.h">
+      <Filter>Test</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\SandboxApp.cpp" />

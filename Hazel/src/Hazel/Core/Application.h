@@ -32,6 +32,7 @@ namespace Hazel {
 
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
+		bool OnWindowResize(WindowResizeEvent& e);
 
 	private:
 		std::unique_ptr<Window> m_Window;

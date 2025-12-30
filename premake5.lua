@@ -70,7 +70,8 @@ project "Hazel"
 		{
 			"HZ_PLATFORM_WINDOWS",
 			"HZ_BUILD_DLL",
-			"GLFW_INCLUDE_NONE"
+			"GLFW_INCLUDE_NONE",
+			"IMGUI_API=__declspec(dllexport)"
 		}
 
 		buildoptions { "/utf-8" }
@@ -97,6 +98,14 @@ project "Hazel"
 			--buildoptions "/MD"
 			optimize "On"
 
+project "ImGui"
+    filter "system:windows"
+        defines 
+        { 
+            "IMGUI_API=__declspec(dllexport)" 
+        }
+    filter {} -- 记得重置过滤器，以免影响后面的代码
+
 
 project "Sandbox"
 	location "Sandbox"
@@ -117,6 +126,7 @@ project "Sandbox"
 	includedirs
 	{
 		"Hazel/vendor/glm", -- 纯头文件库
+		"Hazel/vendor/imgui",
 		"Hazel/vendor/spdlog/include",
 		"Hazel/src"
 	}
@@ -135,7 +145,8 @@ project "Sandbox"
 
 		defines
 		{
-			"HZ_PLATFORM_WINDOWS"
+			"HZ_PLATFORM_WINDOWS",
+			"IMGUI_API=__declspec(dllimport)"
 		}
 
 		buildoptions { "/utf-8" }

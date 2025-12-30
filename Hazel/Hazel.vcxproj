@@ -79,7 +79,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>hzpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>HZ_PLATFORM_WINDOWS;HZ_BUILD_DLL;GLFW_INCLUDE_NONE;HZ_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>HZ_PLATFORM_WINDOWS;HZ_BUILD_DLL;GLFW_INCLUDE_NONE;IMGUI_API=__declspec(dllexport);HZ_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;vendor\glm;vendor\stb_image;vendor\spdlog\include;vendor\GLAD\include;vendor\GLFW\include;vendor\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
@@ -104,7 +104,7 @@ copy /B /Y ..\bin\Debug-windows-x86_64\Hazel\Hazel.dll ..\bin\Debug-windows-x86_
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>hzpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>HZ_PLATFORM_WINDOWS;HZ_BUILD_DLL;GLFW_INCLUDE_NONE;HZ_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>HZ_PLATFORM_WINDOWS;HZ_BUILD_DLL;GLFW_INCLUDE_NONE;IMGUI_API=__declspec(dllexport);HZ_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;vendor\glm;vendor\stb_image;vendor\spdlog\include;vendor\GLAD\include;vendor\GLFW\include;vendor\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -133,7 +133,7 @@ copy /B /Y ..\bin\Release-windows-x86_64\Hazel\Hazel.dll ..\bin\Release-windows-
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>hzpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>HZ_PLATFORM_WINDOWS;HZ_BUILD_DLL;GLFW_INCLUDE_NONE;HZ_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>HZ_PLATFORM_WINDOWS;HZ_BUILD_DLL;GLFW_INCLUDE_NONE;IMGUI_API=__declspec(dllexport);HZ_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;vendor\glm;vendor\stb_image;vendor\spdlog\include;vendor\GLAD\include;vendor\GLFW\include;vendor\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -158,7 +158,6 @@ copy /B /Y ..\bin\Dist-windows-x86_64\Hazel\Hazel.dll ..\bin\Dist-windows-x86_64
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Platform\OpenGL\OpenGLUniformBuffer.h" />
     <ClInclude Include="src\Hazel.h" />
     <ClInclude Include="src\Hazel\Core\Application.h" />
     <ClInclude Include="src\Hazel\Core\Core.h" />
@@ -180,24 +179,27 @@ copy /B /Y ..\bin\Dist-windows-x86_64\Hazel\Hazel.dll ..\bin\Dist-windows-x86_64
     <ClInclude Include="src\Hazel\Renderer\Camera\Camera.h" />
     <ClInclude Include="src\Hazel\Renderer\Camera\PerspectiveCamera.h" />
     <ClInclude Include="src\Hazel\Renderer\Camera\PerspectiveCameraController.h" />
+    <ClInclude Include="src\Hazel\Renderer\Framebuffer.h" />
     <ClInclude Include="src\Hazel\Renderer\GraphicsContext.h" />
     <ClInclude Include="src\Hazel\Renderer\RenderCommand.h" />
     <ClInclude Include="src\Hazel\Renderer\Renderer.h" />
     <ClInclude Include="src\Hazel\Renderer\RendererAPI.h" />
     <ClInclude Include="src\Hazel\Renderer\Shader.h" />
     <ClInclude Include="src\Hazel\Renderer\Texture.h" />
+    <ClInclude Include="src\Hazel\Renderer\UniformBuffer.h" />
     <ClInclude Include="src\Hazel\Renderer\VertexArray.h" />
     <ClInclude Include="src\Hazel\Utils\PlatformUtils.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGLFramebuffer.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLRendererAPI.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLShader.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLTexture.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGLUniformBuffer.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLVertexArray.h" />
     <ClInclude Include="src\Platform\Windows\WindowsInput.h" />
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="src\hzpch.h" />
-    <ClInclude Include="src\Hazel\Renderer\UniformBuffer.h" />
     <ClInclude Include="vendor\glm\glm\common.hpp" />
     <ClInclude Include="vendor\glm\glm\detail\_fixes.hpp" />
     <ClInclude Include="vendor\glm\glm\detail\_noise.hpp" />
@@ -619,7 +621,6 @@ copy /B /Y ..\bin\Dist-windows-x86_64\Hazel\Hazel.dll ..\bin\Dist-windows-x86_64
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Platform\OpenGL\OpenGLUniformBuffer.cpp" />
     <ClCompile Include="src\Hazel\Core\Application.cpp" />
     <ClCompile Include="src\Hazel\Core\Layer.cpp" />
     <ClCompile Include="src\Hazel\Core\LayerStack.cpp" />
@@ -630,18 +631,22 @@ copy /B /Y ..\bin\Dist-windows-x86_64\Hazel\Hazel.dll ..\bin\Dist-windows-x86_64
     <ClCompile Include="src\Hazel\Renderer\Camera\Camera.cpp" />
     <ClCompile Include="src\Hazel\Renderer\Camera\PerspectiveCamera.cpp" />
     <ClCompile Include="src\Hazel\Renderer\Camera\PerspectiveCameraController.cpp" />
+    <ClCompile Include="src\Hazel\Renderer\Framebuffer.cpp" />
     <ClCompile Include="src\Hazel\Renderer\GraphicsContext.cpp" />
     <ClCompile Include="src\Hazel\Renderer\RenderCommand.cpp" />
     <ClCompile Include="src\Hazel\Renderer\Renderer.cpp" />
     <ClCompile Include="src\Hazel\Renderer\RendererAPI.cpp" />
     <ClCompile Include="src\Hazel\Renderer\Shader.cpp" />
     <ClCompile Include="src\Hazel\Renderer\Texture.cpp" />
+    <ClCompile Include="src\Hazel\Renderer\UniformBuffer.cpp" />
     <ClCompile Include="src\Hazel\Renderer\VertexArray.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGLFramebuffer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLRendererAPI.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLShader.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLTexture.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGLUniformBuffer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLVertexArray.cpp" />
     <ClCompile Include="src\Platform\Windows\Utils\WindowsPlatformUtils.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsInput.cpp" />
@@ -649,7 +654,6 @@ copy /B /Y ..\bin\Dist-windows-x86_64\Hazel\Hazel.dll ..\bin\Dist-windows-x86_64
     <ClCompile Include="src\hzpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="src\Hazel\Renderer\UniformBuffer.cpp" />
     <ClCompile Include="vendor\stb_image\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -20,6 +20,7 @@
 
 // ----------------------- ‰÷»æ -------------------------------
 #include "Hazel/Renderer/Renderer.h"
+#include "Hazel/Renderer/Framebuffer.h"
 #include "Hazel/Renderer/VertexArray.h"
 #include "Hazel/Renderer/Camera/PerspectiveCameraController.h"
 #include "Hazel/Renderer/RenderCommand.h"

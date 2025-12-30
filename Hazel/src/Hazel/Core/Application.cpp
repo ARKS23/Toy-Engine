@@ -70,6 +70,7 @@ namespace Hazel {
 		EventDispatcher dispatcher(e);
 		// 如果事件类型是 WindowClose，就调用 OnWindowClose 函数 (这里的逻辑是绑定处理函数，绑定的是OnWindowClose)
 		dispatcher.Dispatch<WindowCloseEvent>(HZ_BIND_EVENT_FN(Application::OnWindowClose));
+		dispatcher.Dispatch<WindowResizeEvent>(HZ_BIND_EVENT_FN(Application::OnWindowResize));
 
 		// 从上面的Overlay开始查询，一直查询到最底层
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin(); ) {
@@ -87,10 +88,15 @@ namespace Hazel {
 	}
 
 	// 窗口关闭具体逻辑
-	bool Application::OnWindowClose(WindowCloseEvent& e)
-	{
+	bool Application::OnWindowClose(WindowCloseEvent& e) {
 		HZ_CORE_INFO("Application Close");
 		m_Running = false;
+		return true;
+	}
+
+	bool Application::OnWindowResize(WindowResizeEvent& e) {
+		HZ_CORE_INFO("Application Resize Window");
+		RenderCommand::SetViewport(0, 0, e.GetWidth(), e.GetHeight());
 		return true;
 	}
 };
