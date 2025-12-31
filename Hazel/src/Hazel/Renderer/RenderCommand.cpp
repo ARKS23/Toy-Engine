@@ -40,5 +40,9 @@ namespace Hazel {
 		s_RendererAPI->SetDepthFunc(func);
 	}
 
+	void RenderCommand::SetDepthMask(bool writable) {
+		s_RendererAPI->SetDepthMask(writable);
+	}
+
 	Hazel::Scope<Hazel::RendererAPI> RenderCommand::s_RendererAPI = RendererAPI::Create();
 }

@@ -78,4 +78,8 @@ namespace Hazel {
 		glDepthFunc(glFunc);
 	}
 
+	void OpenGLRendererAPI::SetDepthMask(bool writable) {
+		glDepthMask(writable ? GL_TRUE : GL_FALSE);
+	}
+
 }

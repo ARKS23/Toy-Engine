@@ -42,6 +42,7 @@ namespace Hazel {
 
 		virtual void SetLineWidth(float width) = 0; // 设置线框大小
 		virtual void SetDepthFunc(DepthFunc func) = 0; // 设置深度比较偏序关系
+		virtual void SetDepthMask(bool writable) = 0; // 设置深度是否写入
 
 		static API GetAPI() { return s_API; } // 静态方法获取当前API
 		static Scope<RendererAPI> Create();	  // 静态工厂方法

@@ -15,6 +15,7 @@ namespace Hazel {
 		static void DrawTriangles(const Ref<VertexArray>& VertexArray, uint32_t vertexCount);
 		static void SetLineWidth(float width);
 		static void SetDepthFunc(RendererAPI::DepthFunc func); // 设置深度比较偏序关系
+		static void SetDepthMask(bool writable); // 设置深度是否写入
 
 	private:
 		static Scope<RendererAPI> s_RendererAPI; // 编译文件中初始化

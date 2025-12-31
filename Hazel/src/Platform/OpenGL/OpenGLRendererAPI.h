@@ -16,6 +16,7 @@ namespace Hazel {
 
 		virtual void SetLineWidth(float width) override;
 		virtual void SetDepthFunc(DepthFunc func) override;
+		virtual void SetDepthMask(bool writable) override;
 	};
 }
 

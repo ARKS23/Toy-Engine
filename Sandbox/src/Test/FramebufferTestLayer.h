@@ -183,7 +183,7 @@ private:
 		m_Texture = Hazel::Texture2D::Create(path);
 
 		// 创建天空盒纹理
-		const std::string skyBoxPath = "assets/skybox/Scene_Lake";
+		const std::string skyBoxPath = "assets/skybox/Lycksele";
 		m_SkyboxTexture = Hazel::TextureCubeMap::Create(skyBoxPath);
 	}
 
