@@ -53,7 +53,11 @@ namespace Hazel {
 	
 
 	void ImGuiLayer::OnEvent(Event& e) {
-		// ´ý²¹³ä
+		if (m_BlockEvents) {
+			ImGuiIO& io = ImGui::GetIO();
+			e.Handled |= e.IsInCategory(EventCategoryMouse) & io.WantCaptureMouse;
+			e.Handled |= e.IsInCategory(EventCategoryKeyboard) & io.WantCaptureKeyboard;
+		}
 	}
 
 	void ImGuiLayer::OnImGuiRender() {

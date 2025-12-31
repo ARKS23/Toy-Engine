@@ -22,8 +22,11 @@ namespace Hazel {
 		void Begin(); // 开启画布
 		void End();   // 绘制画布上的内容
 
+		void SetBlockEvents(bool block) { m_BlockEvents = block; }
+
 	private:
 		float m_Time = 0.0f;
+		bool m_BlockEvents = true;
 	};
 }
 
