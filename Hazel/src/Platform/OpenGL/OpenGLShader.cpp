@@ -11,11 +11,18 @@ namespace Hazel {
 	}
 
 	OpenGLShader::OpenGLShader(const std::string& filepath) : m_FilePath(filepath) {
-		// TODO: 单文件shader，vertex shader 和 fragment shader在同一文件，用#type fragment分割
+		// 单文件shader，vertex shader 和 fragment shader在同一文件，用#type fragment分割
 		
 		std::string source = ReadFile(filepath);
 		PreProcess(source);
 		CreateProgram();
+
+		// 设置shader name
+		auto lastSlash = filepath.find_last_of("/");
+		lastSlash = lastSlash == std::string::npos ? 0 : lastSlash + 1;
+		auto lastDot = filepath.rfind('.');
+		auto count = lastDot == std::string::npos ? filepath.size() - lastSlash : lastDot - lastSlash;
+		m_Name = filepath.substr(lastSlash, count);
 	}
 
 	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc) : m_Name(name){
