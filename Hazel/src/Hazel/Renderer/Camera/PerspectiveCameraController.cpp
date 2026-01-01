@@ -32,7 +32,7 @@ namespace Hazel {
 			position += glm::vec3(0.f, 1.f, 0.f) * velocity;
 		if (Input::IsKeyPressed(Key::E))
 			position -= glm::vec3(0.f, 1.f, 0.f) * velocity;
-		m_Camera.SetPotion(position);
+		m_Camera.SetPosition(position);
 
 		// Êó±êÓÒ¼üÐý×ªÂß¼­
 		if (Input::IsMouseButtonPressed(Mouse::ButtonRight)) {

@@ -17,7 +17,7 @@ namespace Hazel {
 
 		// 位置相关
 		const glm::vec3& GetPosition() const { return m_Position; }
-		void SetPotion(const glm::vec3& position) { m_Position = position; ReCalculateViewMatrix(); }
+		void SetPosition(const glm::vec3& position) { m_Position = position; ReCalculateViewMatrix(); }
 
 		// 摄像机朝向
 		const glm::vec3& GetForward() const { return m_Forward; }
