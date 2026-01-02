@@ -1,6 +1,7 @@
 #include "Hazel.h" 
 #include "Test/CameraTestLayer.h"
 #include "Test/FramebufferTestLayer.h"
+#include "Test/RendererLayer.h"
 
 // ¿Í»§¶Ë×Ô¶¨Òå²ã
 class ExampleLayer : public Hazel::Layer {
@@ -35,9 +36,10 @@ public:
 class Sandbox : public Hazel::Application {
 public:
 	Sandbox() {
-		PushLayer(new ExampleLayer());
-		PushLayer(new Hazel::CameraTestLayer()); // ²âÊÔÉãÏñ»ú
-		PushLayer(new FramebufferTestLayer()); // ²âÊÔÖ¡»º³å
+		PushLayer(new ExampleLayer());	// ²âÊÔÊäÈë
+		//PushLayer(new Hazel::CameraTestLayer()); // ²âÊÔÉãÏñ»ú
+		//PushLayer(new FramebufferTestLayer()); // ²âÊÔÖ¡»º³å
+		PushLayer(new RendererLayer());
 	}
 
 	~Sandbox() {

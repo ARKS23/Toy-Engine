@@ -23,9 +23,11 @@
 #include "Hazel/Renderer/Framebuffer.h"
 #include "Hazel/Renderer/VertexArray.h"
 #include "Hazel/Renderer/Camera/PerspectiveCameraController.h"
+#include "Hazel/Renderer/Camera/OrthographicCameraController.h"
 #include "Hazel/Renderer/RenderCommand.h"
 #include "Hazel/Renderer/Buffer.h"
 #include "Hazel/Renderer/Texture.h"
+#include "Hazel/Renderer/Renderer2D.h"
 
 // ----------------------- ‰÷»æ -------------------------------
 

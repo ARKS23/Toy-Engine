@@ -139,6 +139,7 @@
   <ItemGroup>
     <ClInclude Include="src\Test\CameraTestLayer.h" />
     <ClInclude Include="src\Test\FramebufferTestLayer.h" />
+    <ClInclude Include="src\Test\RendererLayer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\SandboxApp.cpp" />
