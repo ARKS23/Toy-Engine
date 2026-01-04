@@ -9,9 +9,14 @@
 
 namespace Hazel {
 
+	struct ApplicationSpecification {
+		std::string Name = "Hazel Application";
+		std::string WorkingDirectory;
+	};
+
 	class HAZEL_API Application {
 	public:
-		Application();
+		Application(const ApplicationSpecification& specification);
 		virtual ~Application();
 
 	public:
@@ -44,6 +49,7 @@ namespace Hazel {
 
 	private:
 		static Application* s_Instance; // 单例Application
+		ApplicationSpecification m_Specification;
 	};
 
 	// 该函数由客户端实现

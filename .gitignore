@@ -5,5 +5,4 @@ bin-int/
 
 # Files
 *.user
-
-Sandbox/HazelProfile-*.json
+HazelProfile-*.json

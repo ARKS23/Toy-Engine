@@ -96,7 +96,9 @@
     </Link>
     <PostBuildEvent>
       <Command>IF NOT EXIST ..\bin\Debug-windows-x86_64\Sandbox (mkdir ..\bin\Debug-windows-x86_64\Sandbox)
-copy /B /Y ..\bin\Debug-windows-x86_64\Hazel\Hazel.dll ..\bin\Debug-windows-x86_64\Sandbox\Hazel.dll</Command>
+copy /B /Y ..\bin\Debug-windows-x86_64\Hazel\Hazel.dll ..\bin\Debug-windows-x86_64\Sandbox\Hazel.dll
+IF NOT EXIST ..\bin\Debug-windows-x86_64\Hazelnut (mkdir ..\bin\Debug-windows-x86_64\Hazelnut)
+copy /B /Y ..\bin\Debug-windows-x86_64\Hazel\Hazel.dll ..\bin\Debug-windows-x86_64\Hazelnut\Hazel.dll</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -125,7 +127,9 @@ copy /B /Y ..\bin\Debug-windows-x86_64\Hazel\Hazel.dll ..\bin\Debug-windows-x86_
     </Link>
     <PostBuildEvent>
       <Command>IF NOT EXIST ..\bin\Release-windows-x86_64\Sandbox (mkdir ..\bin\Release-windows-x86_64\Sandbox)
-copy /B /Y ..\bin\Release-windows-x86_64\Hazel\Hazel.dll ..\bin\Release-windows-x86_64\Sandbox\Hazel.dll</Command>
+copy /B /Y ..\bin\Release-windows-x86_64\Hazel\Hazel.dll ..\bin\Release-windows-x86_64\Sandbox\Hazel.dll
+IF NOT EXIST ..\bin\Release-windows-x86_64\Hazelnut (mkdir ..\bin\Release-windows-x86_64\Hazelnut)
+copy /B /Y ..\bin\Release-windows-x86_64\Hazel\Hazel.dll ..\bin\Release-windows-x86_64\Hazelnut\Hazel.dll</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">
@@ -154,7 +158,9 @@ copy /B /Y ..\bin\Release-windows-x86_64\Hazel\Hazel.dll ..\bin\Release-windows-
     </Link>
     <PostBuildEvent>
       <Command>IF NOT EXIST ..\bin\Dist-windows-x86_64\Sandbox (mkdir ..\bin\Dist-windows-x86_64\Sandbox)
-copy /B /Y ..\bin\Dist-windows-x86_64\Hazel\Hazel.dll ..\bin\Dist-windows-x86_64\Sandbox\Hazel.dll</Command>
+copy /B /Y ..\bin\Dist-windows-x86_64\Hazel\Hazel.dll ..\bin\Dist-windows-x86_64\Sandbox\Hazel.dll
+IF NOT EXIST ..\bin\Dist-windows-x86_64\Hazelnut (mkdir ..\bin\Dist-windows-x86_64\Hazelnut)
+copy /B /Y ..\bin\Dist-windows-x86_64\Hazel\Hazel.dll ..\bin\Dist-windows-x86_64\Hazelnut\Hazel.dll</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

@@ -23,18 +23,22 @@ namespace Hazel {
 		});
 	*/
 
-	Application* Application::s_Instance = nullptr;
+	Application* Application::s_Instance = nullptr;		// 单例指针
 
-	Application::Application() {
+	Application::Application(const ApplicationSpecification& specification) : m_Specification(specification) {
+		HZ_PROFILE_FUNCTION();
+
 		// 单例模式
 		HZ_CORE_ASSERT(!s_Instance, "Application already exists!");
 		s_Instance = this;
 
-		m_Window = std::unique_ptr<Window>(Window::Create()); // 根据不同平台创建对应平台的窗口
+		m_Window = std::unique_ptr<Window>(Window::Create(WindowProps(specification.Name))); // 根据不同平台创建对应平台的窗口
 		m_Window->SetEventCallback(HZ_BIND_EVENT_FN(Application::OnEvent)); // 一旦有事件发生，调用OnEvent函数
 
+		Renderer::Init();	// 记得初始化渲染器
+
 		m_ImGuiLayer = new ImGuiLayer();
-		m_LayerStack.PushOverlay(m_ImGuiLayer); // ImGuiLayer是overlay
+		PushOverlay(m_ImGuiLayer); // ImGuiLayer是overlay
 	}
 
 	Application::~Application(){}
@@ -45,7 +49,7 @@ namespace Hazel {
 			Timestep timestep = time - m_LastFrameTime;
 			m_LastFrameTime = time;
 
-			RenderCommand::SetClearColor(glm::vec4(0.3, 0.2, 0.5, 1));
+			RenderCommand::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
 			RenderCommand::Clear();
 
 			// update顺序:从下往上更新游戏逻辑，与事件的传播顺序是相反的

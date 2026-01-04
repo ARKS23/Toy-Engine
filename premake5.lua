@@ -80,7 +80,10 @@ project "Hazel"
 		{
 			--("{COPYFILE} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Sandbox")
 			("{MKDIR} ../bin/" .. outputdir .. "/Sandbox"),
-			("{COPYFILE} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Sandbox/Hazel.dll")
+			("{COPYFILE} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Sandbox/Hazel.dll"),
+
+			("{MKDIR} ../bin/" .. outputdir .. "/Hazelnut"),
+			("{COPYFILE} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Hazelnut/Hazel.dll")
 		}
 
 		filter "configurations:Debug"
@@ -137,6 +140,69 @@ project "Sandbox"
 	}
 
 	debugdir "Sandbox" -- 设置调试工作目录为Sandbox文件夹，这样相对路径从Sandbox开始找
+
+	filter "system:windows"
+		cppdialect "C++17"
+		staticruntime "On"
+		systemversion "latest"
+
+		defines
+		{
+			"HZ_PLATFORM_WINDOWS",
+			"IMGUI_API=__declspec(dllimport)"
+		}
+
+		buildoptions { "/utf-8" }
+
+		filter "configurations:Debug"
+			defines "HZ_DEBUG"
+			--runtime "Debug"
+			--buildoptions "/MDd"
+			symbols "On"
+
+		filter "configurations:Release"
+			defines "HZ_RELEASE"
+			--runtime "Release"
+			--buildoptions "/MD"
+			optimize "On"
+
+		filter "configurations:Dist"
+			defines "HZ_DIST"
+			--runtime "Release"
+			--buildoptions "/MD"
+			optimize "On"
+
+
+project "Hazelnut"
+	location "Hazelnut"
+	kind "ConsoleApp"
+	language "C++"
+
+	targetdir("bin/" .. outputdir .. "/%{prj.name}")
+	objdir("bin-int/" .. outputdir .. "/%{prj.name}")
+
+	files 
+	{
+		"%{prj.name}/src/**.h",
+		"%{prj.name}/src/**.cpp"
+		--"%{prj.name}/vendor/glm/glm/**.hpp",
+		--"%{prj.name}/vendor/glm/glm/**.inl"
+	}
+
+	includedirs
+	{
+		"Hazel/vendor/glm", -- 纯头文件库
+		"Hazel/vendor/imgui",
+		"Hazel/vendor/spdlog/include",
+		"Hazel/src"
+	}
+
+	links
+	{
+		"Hazel"
+	}
+
+	debugdir "Hazelnut" -- 设置调试工作目录为Sandbox文件夹，这样相对路径从Sandbox开始找
 
 	filter "system:windows"
 		cppdialect "C++17"

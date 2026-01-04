@@ -8,6 +8,9 @@ namespace Hazel {
 		PerspectiveCamera(float fov, float aspectRatio, float nearClip, float farClip);
 
 		virtual void SetProjectionMatrix(float fov, float aspectRatio, float nearClip, float farClip) override;
+
+	private:
+		float m_Fov, m_AspectRatio, m_NearClip, m_FarClip;
 	};
 }
 
