@@ -11,6 +11,7 @@ namespace Hazel {
 	}
 
 	OpenGLShader::OpenGLShader(const std::string& filepath) : m_FilePath(filepath) {
+		HZ_PROFILE_FUNCTION();
 		// 单文件shader，vertex shader 和 fragment shader在同一文件，用#type fragment分割
 		
 		std::string source = ReadFile(filepath);
@@ -26,6 +27,8 @@ namespace Hazel {
 	}
 
 	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc) : m_Name(name){
+		HZ_PROFILE_FUNCTION();
+
 		// TODO：待改进
 		m_OpenGLSourceCode[GL_VERTEX_SHADER] = vertexSrc;
 		m_OpenGLSourceCode[GL_FRAGMENT_SHADER] = fragmentSrc;
@@ -33,14 +36,20 @@ namespace Hazel {
 	}
 
 	OpenGLShader::~OpenGLShader() {
+		HZ_PROFILE_FUNCTION();
+
 		glDeleteProgram(m_RendererID);
 	}
 
 	void OpenGLShader::Bind() const {
+		HZ_PROFILE_FUNCTION();
+
 		glUseProgram(m_RendererID);
 	}
 
 	void OpenGLShader::UnBind() const {
+		HZ_PROFILE_FUNCTION();
+
 		glUseProgram(0);
 	}
 
@@ -128,6 +137,8 @@ namespace Hazel {
 	}
 
 	std::string OpenGLShader::ReadFile(const std::string& filepath) {
+		HZ_PROFILE_FUNCTION();
+
 		std::string result;
 		std::ifstream in(filepath, std::ios::in | std::ios::binary); 
 
@@ -153,6 +164,8 @@ namespace Hazel {
 	}
 
 	void OpenGLShader::PreProcess(const std::string& source) {
+		HZ_PROFILE_FUNCTION();
+
 		const char* typeToken = "#type";
 		size_t typeTokenLength = strlen(typeToken);
 		size_t pos = source.find(typeToken, 0); // 查找第一个#type

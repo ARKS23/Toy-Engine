@@ -9,6 +9,8 @@ namespace Hazel {
 	}
 
 	void OpenGLContext::Init() {
+		HZ_PROFILE_FUNCTION();
+
 		glfwMakeContextCurrent(m_WindowHandle); // 设置为当前上下文
 
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress); // 初始化GLAD

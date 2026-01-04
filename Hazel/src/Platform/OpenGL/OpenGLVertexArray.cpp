@@ -35,22 +35,32 @@ namespace Hazel {
 	}
 
 	OpenGLVertexArray::OpenGLVertexArray() {
+		HZ_PROFILE_FUNCTION();
+
 		glCreateVertexArrays(1, &m_RenderID); // 4.5+版本DSA风格
 	}
 
 	OpenGLVertexArray::~OpenGLVertexArray() {
+		HZ_PROFILE_FUNCTION();
+
 		glDeleteVertexArrays(1, &m_RenderID);
 	}
 
 	void OpenGLVertexArray::Bind() const {
+		HZ_PROFILE_FUNCTION();
+
 		glBindVertexArray(m_RenderID);
 	}
 
 	void OpenGLVertexArray::UnBind() const {
+		HZ_PROFILE_FUNCTION();
+
 		glBindVertexArray(0);
 	}
 
 	void OpenGLVertexArray::AddVertexBuffer(const Ref<VertexBuffer>& vertexBuffer) {
+		HZ_PROFILE_FUNCTION();
+
 		/* 核心函数: 解析Layout */
 		HZ_CORE_ASSERT(vertexBuffer->GetLayout().GetElements().size(), "Vertex Buffer has no fucking layout!");
 
@@ -124,6 +134,8 @@ namespace Hazel {
 	}
 
 	void OpenGLVertexArray::SetIndexBuffer(const Ref<IndexBuffer>& indexBuffer) {
+		HZ_PROFILE_FUNCTION();
+
 		glBindVertexArray(m_RenderID);
 		indexBuffer->Bind(); // 内部调用索引绑定
 		m_IndexBuffer = indexBuffer;

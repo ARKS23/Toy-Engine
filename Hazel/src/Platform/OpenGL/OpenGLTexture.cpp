@@ -33,6 +33,8 @@ namespace Hazel {
 	OpenGLTexture2D::OpenGLTexture2D(const TextureSpecification& specification) 
 		: m_Specification(specification), m_Width(specification.Width), m_Height(specification.Height)
 	{
+		HZ_PROFILE_FUNCTION();
+
 		m_InternalFormat = Utils::HazelImageFormatToGLInteralFormat(m_Specification.Format);
 		m_DataFormat = Utils::HazelImageFormatToGLDataFormat(m_Specification.Format);
 
@@ -49,6 +51,8 @@ namespace Hazel {
 	}
 
 	OpenGLTexture2D::OpenGLTexture2D(const std::string& path) : m_Path(path){
+		HZ_PROFILE_FUNCTION();
+
 		int width, height, channels;
 		stbi_set_flip_vertically_on_load(true); // OpenGL左下角是(0, 0),需要反向
 
@@ -94,10 +98,14 @@ namespace Hazel {
 	}
 
 	OpenGLTexture2D::~OpenGLTexture2D() {
+		HZ_PROFILE_FUNCTION();
+
 		glDeleteTextures(1, &m_RendererID);
 	}
 
 	void OpenGLTexture2D::SetData(void* data, uint32_t size) {
+		HZ_PROFILE_FUNCTION();
+
 		uint32_t bpp = m_DataFormat == GL_RGBA ? 4 : 3;
 		HZ_CORE_ASSERT(size == m_Width * m_Height * bpp, "Data must be entire texture!"); // 检查数据量是否对的上
 		glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, m_DataFormat, GL_UNSIGNED_BYTE, data);
@@ -110,6 +118,8 @@ namespace Hazel {
 	/* ------------------------------------ TextureCubeMap ------------------------------------- */
 	OpenGLTextureCubeMap::OpenGLTextureCubeMap(const TextureSpecification& specification)
 	: m_Specification(specification), m_Width(specification.Width), m_Height(specification.Height){
+		HZ_PROFILE_FUNCTION();
+
 		m_InternalFormat = Utils::HazelImageFormatToGLInteralFormat(specification.Format);
 		m_DataFormat = Utils::HazelImageFormatToGLDataFormat(specification.Format);
 
@@ -126,6 +136,8 @@ namespace Hazel {
 	}
 
 	OpenGLTextureCubeMap::OpenGLTextureCubeMap(const std::string& dir) : m_Path(dir){
+		HZ_PROFILE_FUNCTION();
+
 		std::vector<std::string> paths(CreateFromDirectory(dir));
 		HZ_CORE_ASSERT(paths.size() == 6, "CubeMap must have 6 textures!");
 		LoadFromPaths(paths);
