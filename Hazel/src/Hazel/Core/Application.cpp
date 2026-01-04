@@ -62,6 +62,10 @@ namespace Hazel {
 		}
 	}
 
+	void Application::Close(){
+		m_Running = false;
+	}
+
 	void Application::OnEvent(Event& e) {
 		// 打印事件
 		//HZ_CORE_TRACE("{0}", e.ToString());
@@ -90,7 +94,8 @@ namespace Hazel {
 	// 窗口关闭具体逻辑
 	bool Application::OnWindowClose(WindowCloseEvent& e) {
 		HZ_CORE_INFO("Application Close");
-		m_Running = false;
+
+		Close();
 		return true;
 	}
 

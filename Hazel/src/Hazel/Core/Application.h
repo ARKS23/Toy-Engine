@@ -16,6 +16,7 @@ namespace Hazel {
 
 	public:
 		void Run();
+		void Close();
 		void OnEvent(Event &e);
 		void PushLayer(Layer* layer); // 暴露给客户端使用的接口
 		void PushOverlay(Layer* overlay);
