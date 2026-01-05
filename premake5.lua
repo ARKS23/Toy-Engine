@@ -193,6 +193,7 @@ project "Hazelnut"
 	includedirs
 	{
 		"Hazel/vendor/glm", -- 纯头文件库
+		"Hazel/vendor/entt/single_include/entt", -- 纯头文件库
 		"Hazel/vendor/imgui",
 		"Hazel/vendor/spdlog/include",
 		"Hazel/src"
