@@ -21,6 +21,8 @@
 #include "Hazel/Core/Log.h"
 #include "Hazel/Debug/Instrumentor.h"
 
+#include <entt.hpp>
+
 #ifdef HZ_PLATFORM_WINDOWS
 	#include <Windows.h>
 #endif

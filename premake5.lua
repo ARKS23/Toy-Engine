@@ -46,6 +46,7 @@ project "Hazel"
 	{
 		"%{prj.name}/src",
 		"%{prj.name}/vendor/glm", -- 纯头文件库
+		"%{prj.name}/vendor/entt/single_include/entt", -- 纯头文件库
 		"%{prj.name}/vendor/stb_image",
 		"%{prj.name}/vendor/spdlog/include",
 		"%{prj.name}/vendor/GLAD/include",
