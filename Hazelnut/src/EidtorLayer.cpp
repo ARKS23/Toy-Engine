@@ -19,6 +19,19 @@ namespace Hazel {
 	}
 
 	void EidtorLayer::OnImGuiRender() {
+		DrawDockSpace();
+	}
+
+	void EidtorLayer::OnUpdate(Timestep ts) {
+		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
+		RenderCommand::Clear();
+	}
+
+	void EidtorLayer::OnEvent(Event& event) {
+
+	}
+
+	void EidtorLayer::DrawDockSpace() {
 		/* ------------------------------------------- 下面这堆模板代码实现Dockspace ------------------------------------------- */
 		static bool dockspaceOpen = true;
 		static bool opt_fullscreen = true;
@@ -76,7 +89,7 @@ namespace Hazel {
 		}
 
 		// ===============================
-		// MenuBar（可选）
+		// MenuBar: 这部分考虑封装成单独函数
 		// ===============================
 		if (ImGui::BeginMenuBar())
 		{
@@ -90,14 +103,4 @@ namespace Hazel {
 
 		ImGui::End();
 	}
-
-	void EidtorLayer::OnUpdate(Timestep ts) {
-		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
-		RenderCommand::Clear();
-	}
-
-	void EidtorLayer::OnEvent(Event& event) {
-
-	}
-
 }

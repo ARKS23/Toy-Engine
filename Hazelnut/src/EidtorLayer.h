@@ -19,7 +19,7 @@ namespace Hazel {
 		virtual void OnEvent(Event& event) override;
 
 	private:
-
+		void DrawDockSpace();
 	};
 }
 
