@@ -3,10 +3,13 @@
 
 #include <glm/glm.hpp>
 
+/* 这个父类设计有问题，之后需要进行重构 */
+
 namespace Hazel {
 	class HAZEL_API Camera {
 	public:
 		Camera() = default;
+		Camera(const glm::mat4& projection) : m_ProjectionMatrix(projection) {}
 		virtual ~Camera() = default;
 
 	public:

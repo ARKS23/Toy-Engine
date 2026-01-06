@@ -7,6 +7,7 @@ namespace Hazel {
 	class HAZEL_API OrthographicCamera : public Camera{
 	public:
 		OrthographicCamera(float left, float right, float bottom, float top);
+		OrthographicCamera(const glm::mat4& projection) : Camera(projection) {}
 
 	public:
 		float GetRotation() const { return m_Rotation; }
