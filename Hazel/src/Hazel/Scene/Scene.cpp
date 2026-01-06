@@ -33,10 +33,26 @@ namespace Hazel {
 	}
 
 	// 包装函数，把CopyComponent的调用转发给上面的辅助函数
-	// ComponentGroup是Components.h里的AllComponents，传给辅助函数后遍历所有型别
+	// ComponentGroup是Components.h里的AllComponents，传给辅助函数后遍历所有型别,遵循开闭原则
 	template<typename... Component>
 	static void CopyComponent(ComponentGroup<Component...>, entt::registry& dst, entt::registry& src, const std::unordered_map<UUID, entt::entity>& enttMap) {
 		CopyComponent<Component...>(dst, src, enttMap);
+	}
+
+	template<typename... Component>
+	static void CopyComponentIfExists(Entity dst, Entity src) {
+		// 折叠表达式：对模板列表里的每一个 Component 类型，执行一次 Lambda
+		([&]()
+			{
+				// 如果源实体身上有这个组件，就给目标实体也装一个一模一样的
+				if (src.HasComponent<Component>())
+					dst.AddOrReplaceComponent<Component>(src.GetComponent<Component>());
+			}(), ...);
+	}
+
+	template<typename... Component>
+	static void CopyComponentIfExists(ComponentGroup<Component...>, Entity dst, Entity src) {
+		CopyComponentIfExists<Component...>(dst, src);
 	}
 
 	Ref<Scene> Scene::Copy(Ref<Scene> other)
@@ -65,4 +81,26 @@ namespace Hazel {
 
 		return newScene;
 	}
+
+	Entity Scene::CreateEntity(const std::string& name) {
+		return CreateEntityWithUUID(UUID(), name);
+	}
+
+	Entity Scene::CreateEntityWithUUID(UUID uuid, const std::string& name) {
+		Entity entity = { m_Registry.create(), this };
+		entity.AddComponent<IDComponent>(uuid);
+		entity.AddComponent<TransformComponent>();
+		entity.AddComponent<TagComponent>(name.empty() ? "Entity" : name);
+
+		m_EntityMap[uuid] = entity;
+
+		return entity;
+	}
+
+	void Scene::DestroyEntity(Entity entity) {
+		m_EntityMap.erase(entity.GetUUID());
+		m_Registry.destroy(entity);
+	}
+
+
 }
