@@ -269,7 +269,7 @@ namespace Hazel {
 		auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);	// group会把内存中的数据紧凑
 		for (auto entity : group) {
 			auto [transf0rm, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
-			//Renderer2D.DrawSprite(transf0rm.GetTransform(), sprite, (int)entity);
+			//Renderer2D::DrawSprite(transf0rm.GetTransform(), sprite, (int)entity);
 		}
 
 		// 圆形

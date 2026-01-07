@@ -239,7 +239,7 @@ namespace Hazel {
 			DisplayAddComponentEntry<CameraComponent>("Camera");
 			//DisplayAddComponentEntry<ScriptComponent>("Script");
 			//DisplayAddComponentEntry<SpriteRendererComponent>("Sprite Renderer");
-			//DisplayAddComponentEntry<CircleRendererComponent>("Circle Renderer");
+			DisplayAddComponentEntry<CircleRendererComponent>("Circle Renderer");
 			//DisplayAddComponentEntry<Rigidbody2DComponet>("Rigidbody 2D");
 			//DisplayAddComponentEntry<BoxCollider2DComponent>("Box Collider 2D");
 			//DisplayAddComponentEntry<CircleCollider2Dcomponent>("Circle Collider 2D");

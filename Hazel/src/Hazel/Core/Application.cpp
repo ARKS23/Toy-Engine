@@ -13,6 +13,7 @@
 #include "Hazel/Renderer/VertexArray.h"
 #include "Hazel/Renderer/Camera/PerspectiveCameraController.h"
 #include "Hazel/Renderer/RenderCommand.h"
+#include "Hazel/Renderer/Renderer2D.h"
 
 namespace Hazel {
 	//#define HZ_BIND_EVENT_FN(x) std::bind(&x, this, std::placeholders::_1)
@@ -36,6 +37,7 @@ namespace Hazel {
 		m_Window->SetEventCallback(HZ_BIND_EVENT_FN(Application::OnEvent)); // 一旦有事件发生，调用OnEvent函数
 
 		Renderer::Init();	// 记得初始化渲染器
+		Renderer2D::Init();
 
 		m_ImGuiLayer = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayer); // ImGuiLayer是overlay

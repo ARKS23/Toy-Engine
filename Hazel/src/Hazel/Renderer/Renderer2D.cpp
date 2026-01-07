@@ -189,7 +189,7 @@ namespace Hazel {
 
 		/* ×ÅÉ«Æ÷: ´ı¸ÄÁ¼ */
 		s_2DData.QuadShader = Shader::Create("assets/shaders/quadShader.glsl");
-		s_2DData.CircleShader = Shader::Create("assets/shaders/quadShader.glsl");
+		s_2DData.CircleShader = Shader::Create("assets/shaders/Renderer2D_Circle.glsl");
 		s_2DData.LineShader = Shader::Create("assets/shaders/quadShader.glsl");
 		//s_2DData.TextShader = Shader::Create("");
 

@@ -3,6 +3,7 @@
 #include "Hazel.h"
 #include "Hazel/Scene/Scene.h"
 #include "Panels/SceneHierarchyPanel.h"
+#include "Hazel/Renderer/Framebuffer.h"
 
 namespace Hazel {
 	class EidtorLayer : public Layer{
@@ -26,6 +27,8 @@ namespace Hazel {
 	private:
 		Ref<Scene> m_ActiveScene;
 		SceneHierarchyPanel m_SceneHierarchyPanel;
+		Ref<Framebuffer> m_Framebuffer;
+		glm::vec2 m_ViewportSize = { 0.0f, 0.0f };
 	};
 }
 
