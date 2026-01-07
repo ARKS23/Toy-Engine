@@ -88,7 +88,7 @@ namespace Hazel {
 	};
 
 	/* 这种写法值得学习，OOP享受ECS的性能 */
-	struct NativeScriptComponent {
+	struct HAZEL_API NativeScriptComponent {
 		ScriptableEntity* Instance = nullptr;
 
 		/* 函数指针: 返回值 | 变量名 | 参数列表 */

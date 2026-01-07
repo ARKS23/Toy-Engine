@@ -3,7 +3,7 @@
 #include "Hazel/Renderer/Camera/Camera.h"
 
 namespace Hazel {
-	class SceneCamera : public Camera {
+	class HAZEL_API SceneCamera : public Camera {
 	public:
 		enum class ProjectionType {
 			Perspeective = 0,

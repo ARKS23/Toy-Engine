@@ -1,18 +1,21 @@
 #pragma once
+#include "Hazel/Core/Log.h"
 #include "Hazel/Core/UUID.h"
 #include "Components.h"
-#include "Scene.h"
+//#include "Scene.h"
 
 #include "entt.hpp"
 
 
+#if 0
 namespace Hazel {
+	// Entity迁移到Scene.h中实现
 	/* 封装的Entity类，让ECS像OOP一样操作，该类根据Entity模型进行设计 */
 	/* 理解这个Entity模型，一个Entity对应每一种Component类型最多只能拥有一个示例 */
-	class Entity {
+	class HAZEL_API Entity {
 	public:
 		Entity() = default;
-		Entity(entt::entity handle, Scene* scene);
+		Entity(entt::entity handle, Scene* scene) : m_EntityHandle(handle), m_Scene(scene) {}
 		Entity(const Entity& other) = default;
 
 		template<typename T, typename... Args>
@@ -72,4 +75,5 @@ namespace Hazel {
 		Scene* m_Scene = nullptr;	// 所有的组件操作转发给Scene的registry
 	};
 }
+#endif
 

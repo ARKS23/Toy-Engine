@@ -1,6 +1,6 @@
 #pragma once
 #include "Hazel/Core/Core.h"
-#include "Entity.h"
+#include "Scene.h"
 
 namespace Hazel {
 	class HAZEL_API ScriptableEntity {

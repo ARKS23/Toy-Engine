@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Hazel.h"
+#include "Hazel/Scene/Scene.h"
+#include "Panels/SceneHierarchyPanel.h"
 
 namespace Hazel {
 	class EidtorLayer : public Layer{
@@ -20,6 +22,10 @@ namespace Hazel {
 
 	private:
 		void DrawDockSpace();
+
+	private:
+		Ref<Scene> m_ActiveScene;
+		SceneHierarchyPanel m_SceneHierarchyPanel;
 	};
 }
 

@@ -138,10 +138,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\EidtorLayer.h" />
+    <ClInclude Include="src\Panels\SceneHierarchyPanel.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EidtorLayer.cpp" />
     <ClCompile Include="src\HazelnutApp.cpp" />
+    <ClCompile Include="src\Panels\SceneHierarchyPanel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Hazel\Hazel.vcxproj">

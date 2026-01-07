@@ -1,5 +1,7 @@
 #include "EidtorLayer.h"
 
+#include "Panels/SceneHierarchyPanel.h"
+
 #include "imgui.h"
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
@@ -12,6 +14,9 @@ namespace Hazel {
 
 	void EidtorLayer::OnAttach() {
 		HZ_INFO("EditorLayer Attach!");
+
+		m_ActiveScene = Hazel::CreateRef<Hazel::Scene>();
+		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
 	}
 
 	void EidtorLayer::OnDetach() {
@@ -20,6 +25,8 @@ namespace Hazel {
 
 	void EidtorLayer::OnImGuiRender() {
 		DrawDockSpace();
+
+		m_SceneHierarchyPanel.OnImGuiRender();
 	}
 
 	void EidtorLayer::OnUpdate(Timestep ts) {
