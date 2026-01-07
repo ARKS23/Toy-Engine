@@ -2,6 +2,10 @@
 #include "Scene.h"
 #include "Entity.h"
 
+#include "ScriptableEntity.h"
+#include "Hazel/Renderer/Renderer2D.h"
+#include "Components.h"
+
 // Box2D
 //#include "box2d/b2_world.h"
 //#include "box2d/b2_body.h"
@@ -25,7 +29,7 @@ namespace Hazel {
 				auto view = src.view<Component>();	// 获取场景里所有拥有该组件的实体
 				for (auto srcEntity : view) {
 					entt::entity dstEntity = enttMap.at(src.get<IDComponent>(srcEntity).ID);	// 两个场景的id可能不一样但是UUID一样
-					auto& srcComponent = src.get<Component>(srcEntity);
+					Component& srcComponent = src.get<Component>(srcEntity);
 					dst.emplace_or_replace<Component>(dstEntity, srcComponent);
 				}
 			}(),
@@ -102,5 +106,227 @@ namespace Hazel {
 		m_Registry.destroy(entity);
 	}
 
+	void Scene::OnRuntimeStart() {
+		m_IsRunning = true;
 
+		//OnPhysics2DStart();
+
+		{
+			//ScriptEngine::OnRuntimeStart(this);
+
+			auto view = m_Registry.view<ScriptComponent>();
+			for (auto e : view) {
+				Entity entity = { e, this };
+				//ScriptEngine::OnCreateEntity(entity);
+			}
+		}
+	}
+
+	void Scene::OnRuntimeStop() {
+		m_IsRunning = false;
+
+		// OnPhysics2DStop();
+
+		// ScriptEngine::OnRuntimeStop();
+	}
+
+	void Scene::OnSimulationStart(){
+		//OnPhysics2DStart();
+	}
+
+	void Scene::OnSimulationStop(){
+		//OnPhysics2DStop();
+	}
+
+	void Scene::OnUpdateRuntime(Timestep ts) {
+		if (!m_IsPaused || m_StepFrames-- > 0) {
+			/* 脚本 */
+			// C# (TODO)
+			auto view = m_Registry.view<ScriptComponent>();
+			for (auto e : view) {
+				Entity entity = { e, this };
+				//ScriptEngine::OnUpdateEntity(entity, ts);
+			}
+
+			// 遍历所有挂载了原生脚本组件的实体
+			m_Registry.view<NativeScriptComponent>().each([=](auto entity, NativeScriptComponent& nsc) {
+				if (!nsc.Instance) {
+					nsc.Instance = nsc.InstantiateScript();
+					nsc.Instance->m_Entity = Entity{ entity, this };
+					nsc.Instance->OnCreate();
+				}
+				nsc.Instance->OnUpdate(ts);
+			});
+
+			/* 物理(TODO) */
+		}
+
+
+		/* 渲染 */
+		Camera* mainCamera = nullptr;
+		glm::mat4 cameraTransfrom;
+		{
+			// 找主摄像机
+			auto view = m_Registry.view<TransformComponent, CameraComponent>();
+			view.each([&](auto entity, TransformComponent& transform, CameraComponent& camera) {
+				if (mainCamera) return;
+				if (camera.Primary) {
+					mainCamera = &camera.camera;
+					cameraTransfrom = transform.GetTransform();
+				}
+			});
+		}
+
+		if (mainCamera) {
+			Renderer2D::BeginScene(*mainCamera, cameraTransfrom);
+			// Draw Sprites 跳过
+			// 圆形绘制
+			{
+				auto view = m_Registry.view<TransformComponent, CircleRendererComponent>();
+				view.each([](auto entity, TransformComponent& transform, CircleRendererComponent& circle) {
+					Renderer2D::DrawCircle(transform.GetTransform(), circle.Color, circle.Thickness, circle.Fade, (int)entity);
+				});
+			}
+
+			// Draw text 跳过
+			Renderer2D::EndScene();
+		}
+	}
+
+	void Scene::OnUpdateSimulation(Timestep ts, EditorCamera& camera) {
+		if (!m_IsPaused || m_StepFrames-- > 0)
+		{
+			// 物理模拟(TODO)
+		}
+
+		// Render
+		RenderScene(camera);
+	}
+
+	void Scene::OnUpdateEditor(Timestep ts, EditorCamera& camera) {
+		RenderScene(camera);	// 编辑器模式只渲染
+	}
+
+	void Scene::OnViewportResize(uint32_t width, uint32_t height) {
+		if (m_ViewportWidth == width && m_ViewportHeight == height)
+			return;
+
+		m_ViewportWidth = width;
+		m_ViewportHeight = height;
+
+		auto view = m_Registry.view<CameraComponent>();
+		view.each([=](auto entity, CameraComponent& cameraComponent) {
+			if (!cameraComponent.FixedAspectRatio) {	// 不锁宽高比的才进行设置
+				cameraComponent.camera.SetViewportSize(m_ViewportWidth, m_ViewportHeight);
+			}
+		});
+	}
+
+	Entity Scene::DuplicateEntity(Entity entity) {
+		std::string name = entity.GetName();
+		Entity newEntity = CreateEntity(name);
+		CopyComponentIfExists(AllComponents{}, newEntity, entity);
+		return newEntity;
+	}
+
+	Entity Scene::FindEntityByName(std::string_view name) {
+		auto view = m_Registry.view<TagComponent>();
+		for (auto entity : view)
+		{
+			const TagComponent& tc = view.get<TagComponent>(entity);
+			if (tc.Tag == name)
+				return Entity{ entity, this };
+		}
+		return {};
+	}
+
+	Entity Scene::GetEntityByUUID(UUID uuid) {
+		if (m_EntityMap.find(uuid) != m_EntityMap.end())
+			return { m_EntityMap.at(uuid), this };
+		return {};
+	}
+
+	Entity Scene::GetPrimaryCameraEntity()
+	{
+		auto view = m_Registry.view<CameraComponent>();
+		for (auto entity : view)
+		{
+			const auto& camera = view.get<CameraComponent>(entity);
+			if (camera.Primary)
+				return Entity{ entity, this };
+		}
+		return {};
+	}
+
+	void Scene::Step(int frames) {
+		m_StepFrames = frames;
+	}
+
+	void Scene::RenderScene(EditorCamera& camera) {
+		Renderer2D::BeginScene(camera);
+
+		// 纹理
+		auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);	// group会把内存中的数据紧凑
+		for (auto entity : group) {
+			auto [transf0rm, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
+			//Renderer2D.DrawSprite(transf0rm.GetTransform(), sprite, (int)entity);
+		}
+
+		// 圆形
+		auto view = m_Registry.view<TransformComponent, CircleRendererComponent>();
+		view.each([&](auto entity, auto& transform, auto& circle)
+		{
+			Renderer2D::DrawCircle(transform.GetTransform(), circle.Color, circle.Thickness, circle.Fade, (int)entity);
+		});
+
+		// 文字
+		Renderer2D::EndScene();
+	}
+
+	/* -------------------------- 模板特化函数: 这个函数在Entity中AddComponent进行了调用 -------------------------- */
+	/* 调用链：CopyComponentIfExists ->  Entity::AddOrReplaceComponent -> Scene::OnComponentAdded , 因此要补全特化类型*/
+	template<typename T>
+	void Scene::OnComponentAdded(Entity entity, T& component) {
+		static_assert(sizeof(T) == 0);
+	}
+
+	template<>
+	void Scene::OnComponentAdded<IDComponent>(Entity entity, IDComponent& component){}
+
+	template<>
+	void Scene::OnComponentAdded<TransformComponent>(Entity entity, TransformComponent& component){}
+
+	template<>
+	void Scene::OnComponentAdded<CameraComponent>(Entity entity, CameraComponent& component)
+	{
+		if (m_ViewportWidth > 0 && m_ViewportHeight > 0)
+			component.camera.SetViewportSize(m_ViewportWidth, m_ViewportHeight);
+	}
+
+	template<>
+	void Scene::OnComponentAdded<ScriptComponent>(Entity entity, ScriptComponent& component){}
+
+	template<>
+	void Scene::OnComponentAdded<SpriteRendererComponent>(Entity entity, SpriteRendererComponent& component){}
+
+	template<>
+	void Scene::OnComponentAdded<CircleRendererComponent>(Entity entity, CircleRendererComponent& component){}
+
+	template<>
+	void Scene::OnComponentAdded<TagComponent>(Entity entity, TagComponent& component){}
+
+	template<>
+	void Scene::OnComponentAdded<NativeScriptComponent>(Entity entity, NativeScriptComponent& component){}
+
+	template<>
+	void Scene::OnComponentAdded<BoxCollider2DComponent>(Entity entity, BoxCollider2DComponent& component){}
+
+	template<>
+	void Scene::OnComponentAdded<Rigidbody2DComponet>(Entity entity, Rigidbody2DComponet& component) {}
+
+	template<>
+	void Scene::OnComponentAdded<CircleCollider2Dcomponent>(Entity entity, CircleCollider2Dcomponent& component){}
+
+	template<>
+	void Scene::OnComponentAdded<TextComponent>(Entity entity, TextComponent& component){}
 }

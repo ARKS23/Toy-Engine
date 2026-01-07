@@ -33,9 +33,9 @@ namespace Hazel {
 
 	/* 空间信息结构体 */
 	struct TransformComponent {
-		glm::vec3 Translation;
-		glm::vec3 Rotation;
-		glm::vec3 Scale;
+		glm::vec3 Translation = { 0.0f, 0.0f, 0.0f };
+		glm::vec3 Rotation = { 0.0f, 0.0f, 0.0f };
+		glm::vec3 Scale = { 1.f ,1.f ,1.f };
 
 		TransformComponent() = default;
 		TransformComponent(const TransformComponent&) = default;
@@ -104,15 +104,15 @@ namespace Hazel {
 
 	/* TODO: 物理部分 */
 	struct Rigidbody2DComponet {
-
+		int a = 0;
 	};
 
 	struct BoxCollider2DComponent {
-
+		int a = 0;
 	};
 
 	struct CircleCollider2Dcomponent {
-
+		int a = 0;
 	};
 
 	/* TODO: 字体部分 */
@@ -124,6 +124,10 @@ namespace Hazel {
 	//	float Kerning = 0.0f;
 	//	float LineSpacing = 0.0f;
 	//};
+
+	struct TextComponent {
+		int a = 0;
+	};
 
 
 	template<typename... Component>

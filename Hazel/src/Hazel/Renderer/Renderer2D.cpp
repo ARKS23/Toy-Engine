@@ -6,6 +6,7 @@
 #include "Hazel/Renderer/Texture.h"
 #include "Hazel/Renderer/UniformBuffer.h"
 #include "Hazel/Renderer/RenderCommand.h"
+#include "Hazel/Renderer/Camera/EditorCamra.h"
 
 namespace Hazel {
 	struct QuadVertex {
@@ -218,6 +219,15 @@ namespace Hazel {
 
 	void Renderer2D::BeginScene(const Camera& camera, const glm::mat4& transform) {
 		s_2DData.CameraBuffer.ViewProjection = camera.GetProjectionMatrix() * glm::inverse(transform);
+		s_2DData.cameraUniformBuffer->SetData(&s_2DData.CameraBuffer, sizeof(Renderer2DData::CameraData));
+
+		StartBatch();
+	}
+
+	void Renderer2D::BeginScene(const EditorCamera& camera) {
+		HZ_PROFILE_FUNCTION();
+
+		s_2DData.CameraBuffer.ViewProjection = camera.GetViewProjection();
 		s_2DData.cameraUniformBuffer->SetData(&s_2DData.CameraBuffer, sizeof(Renderer2DData::CameraData));
 
 		StartBatch();

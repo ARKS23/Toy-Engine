@@ -20,7 +20,7 @@ namespace Hazel {
 			HZ_CORE_ASSERT(!HasComponent<T>(), "Entity already has component!");
 
 			T& component = m_Scene->m_Registry.emplace<T>(m_EntityHandle, std::forward<Args>(args)...);
-			m_Scene->OnComponentAdded<T>(*this, component);
+			m_Scene->OnComponentAdded<T>(*this, component);	// 这里进行了调用，Scene需要提供特化版本
 
 			return component;
 		}
@@ -41,7 +41,8 @@ namespace Hazel {
 
 		template<typename T>
 		bool HasComponent() {
-			return m_Scene->m_Registry.has<T>(m_EntityHandle);
+			//return m_Scene->m_Registry.has<T>(m_EntityHandle);
+			return m_Scene->m_Registry.all_of<T>(m_EntityHandle);
 		}
 
 		template<typename T>
